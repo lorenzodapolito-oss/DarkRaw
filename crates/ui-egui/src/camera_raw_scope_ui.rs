@@ -573,7 +573,15 @@ pub(crate) fn preview(ui: &mut egui::Ui, d: &mut CameraRawDialog, view: &mut Cam
         d.scope.pointer_sample = None;
     }
     let to_screen = |p: [f32; 2]| pos2(rect.left() + p[0] * rect.width(), rect.top() + p[1] * rect.height());
-    if view.sampler_tool && !panning {
+    if d.wb_pick && !panning {
+        resp.clone().on_hover_cursor(egui::CursorIcon::Crosshair);
+        if resp.clicked()
+            && let Some(p) = d.scope.pointer_sample
+        {
+            d.pick_white_balance(p);
+        }
+    }
+    if view.sampler_tool && !d.wb_pick && !panning {
         resp.clone().on_hover_cursor(egui::CursorIcon::Crosshair);
         if resp.clicked()
             && let Some(p) = d.scope.pointer_sample

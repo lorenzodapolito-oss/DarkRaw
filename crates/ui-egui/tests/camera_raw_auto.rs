@@ -54,3 +54,44 @@ fn auto_on_a_flat_picture_changes_nothing_and_a_bad_value_is_an_error() {
     let bad = camera_raw_ui::menu(&mut app, &ctx, "filter.cameraRaw", &json!({"ui": {"auto": "yes"}}));
     assert!(matches!(bad, Some(Err(_))), "{bad:?}");
 }
+
+fn warm_app(color: &str) -> PhotocraftApp {
+    let mut app = PhotocraftApp::new(photocraft_engine::Session::new(), Default::default());
+    app.run("file.new", json!({"width": 16, "height": 16})).unwrap();
+    app.run("layer.new.layer", json!({})).unwrap();
+    app.run("edit.fill", json!({"color": color})).unwrap();
+    app
+}
+
+#[test]
+fn the_white_balance_pick_and_auto_white_balance_cool_a_warm_picture() {
+    let ctx = egui::Context::default();
+    let mut app = warm_app("#c8a070");
+    camera_raw_ui::menu(&mut app, &ctx, "filter.cameraRaw", &json!({})).unwrap().unwrap();
+    let picked = ui(&mut app, &ctx, json!({"whiteBalanceAt": [0.5, 0.5]}));
+    let t = picked["params"]["temperature"].as_f64().unwrap();
+    assert!(t < -10.0, "a warm pick is cooled, got {t}");
+    // One undo returns to As Shot.
+    assert_eq!(ui(&mut app, &ctx, json!({"undo": true}))["params"]["temperature"], 0.0);
+    // Auto white balance reaches the same on a flat picture.
+    let auto = ui(&mut app, &ctx, json!({"autoWhiteBalance": true}));
+    assert_eq!(auto["params"]["temperature"].as_f64().unwrap(), t);
+    assert_eq!(auto["params"]["exposure"], 0.0, "only Temperature and Tint move");
+}
+
+#[test]
+fn a_white_balance_pick_with_nothing_to_balance_or_a_bad_point_is_an_error() {
+    let ctx = egui::Context::default();
+    let mut app = warm_app("#000000");
+    camera_raw_ui::menu(&mut app, &ctx, "filter.cameraRaw", &json!({})).unwrap().unwrap();
+    for bad in
+        [json!({"whiteBalanceAt": [0.5, 0.5]}), json!({"whiteBalanceAt": [0.5]}), json!({"whiteBalanceAt": "centre"}), json!({"whiteBalanceAt": [0.5, "x"]})]
+    {
+        let r = camera_raw_ui::menu(&mut app, &ctx, "filter.cameraRaw", &json!({"ui": bad}));
+        assert!(matches!(r, Some(Err(_))), "{bad}: {r:?}");
+    }
+    // Off-picture points clamp to the edge instead of panicking.
+    let mut app = warm_app("#c8a070");
+    camera_raw_ui::menu(&mut app, &ctx, "filter.cameraRaw", &json!({})).unwrap().unwrap();
+    assert!(ui(&mut app, &ctx, json!({"whiteBalanceAt": [-5.0, 9.0]}))["params"]["temperature"].as_f64().unwrap() < 0.0);
+}

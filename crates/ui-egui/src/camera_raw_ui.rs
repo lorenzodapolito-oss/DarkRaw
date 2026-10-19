@@ -74,6 +74,8 @@ pub struct CameraRawDialog {
     redo: Vec<CameraRaw>,
     /// Params at pointer-down. One drag is one undo step.
     edit_origin: Option<CameraRaw>,
+    /// The White Balance (eyedropper) tool is armed: a click on the preview picks a neutral.
+    pub(crate) wb_pick: bool,
 }
 
 impl CameraRawDialog {
@@ -137,6 +139,43 @@ impl CameraRawDialog {
                 out.copy_from_slice(src);
             }
         })
+    }
+
+    /// Sets Temperature and Tint from a white-balance pick, as one undoable edit.
+    fn set_white_balance(&mut self, found: Option<(f32, f32)>) -> bool {
+        let Some((temperature, tint)) = found else { return false };
+        if (self.params.temperature, self.params.tint) != (temperature, tint) {
+            remember_edit(self);
+            self.params.temperature = temperature;
+            self.params.tint = tint;
+            self.dirty = true;
+        }
+        true
+    }
+
+    /// White Balance tool: the point `at` (0..=1 across the picture) is made neutral. The
+    /// sample is the average of a small window of the source, so noise doesn't steer it.
+    /// False when the point has no usable colour (black, or outside the picture).
+    pub(crate) fn pick_white_balance(&mut self, at: [f32; 2]) -> bool {
+        if !at.iter().all(|v| v.is_finite()) || self.pw == 0 || self.ph == 0 {
+            return false;
+        }
+        let cx = (at[0].clamp(0.0, 1.0) * (self.pw - 1) as f32).round() as usize;
+        let cy = (at[1].clamp(0.0, 1.0) * (self.ph - 1) as f32).round() as usize;
+        let mut window = Vec::with_capacity(25);
+        for y in cy.saturating_sub(2)..=(cy + 2).min(self.ph - 1) {
+            for x in cx.saturating_sub(2)..=(cx + 2).min(self.pw - 1) {
+                if let Some(q) = self.proxy.get(y * self.pw + x) {
+                    window.push(*q);
+                }
+            }
+        }
+        self.set_white_balance(photocraft_algo::camera_raw::average_white_balance(&window))
+    }
+
+    /// Auto white balance: the picture's average colour is made neutral.
+    pub(crate) fn auto_white_balance(&mut self) -> bool {
+        self.set_white_balance(photocraft_algo::camera_raw::average_white_balance(&self.proxy))
     }
 
     /// Auto: chooses Exposure, Contrast, Highlights, Shadows, Whites and Blacks from the picture
@@ -670,6 +709,7 @@ fn open_pixels(
         undo: Vec::new(),
         redo: Vec::new(),
         edit_origin: None,
+        wb_pick: false,
     };
     d.render(ctx);
     app.camera_raw = Some(d);
@@ -708,8 +748,10 @@ pub fn menu(app: &mut PhotocraftApp, ctx: &egui::Context, id: &str, params: &Val
     for (key, value) in fields {
         match key.as_str() {
             "set" | "scope" | "view" => {}
-            "before" | "commit" | "cancel" | "saveSettings" | "loadSettings" | "undo" | "redo" | "auto" if value.is_boolean() => {}
-            "before" | "commit" | "cancel" | "saveSettings" | "loadSettings" | "undo" | "redo" | "auto" => {
+            "whiteBalanceAt" if value.as_array().is_some_and(|a| a.len() == 2 && a.iter().all(Value::is_number)) => {}
+            "whiteBalanceAt" => return Some(Err("Camera Raw whiteBalanceAt must be [x, y] across the picture, 0 to 1".into())),
+            "before" | "commit" | "cancel" | "saveSettings" | "loadSettings" | "undo" | "redo" | "auto" | "autoWhiteBalance" if value.is_boolean() => {}
+            "before" | "commit" | "cancel" | "saveSettings" | "loadSettings" | "undo" | "redo" | "auto" | "autoWhiteBalance" => {
                 return Some(Err(format!("Camera Raw {key} must be a boolean")));
             }
             _ => return Some(Err(format!("unknown Camera Raw ui property {key}"))),
@@ -801,6 +843,15 @@ fn menu_update(app: &mut PhotocraftApp, ctx: &egui::Context, ui: &Value) -> Opti
     }
     if ui.get("auto").and_then(Value::as_bool) == Some(true) {
         d.auto_tone();
+    }
+    if ui.get("autoWhiteBalance").and_then(Value::as_bool) == Some(true) {
+        d.auto_white_balance();
+    }
+    if let Some(at) = ui.get("whiteBalanceAt").and_then(Value::as_array) {
+        let coord = |i: usize| at.get(i).and_then(Value::as_f64).unwrap_or(0.0) as f32;
+        if !d.pick_white_balance([coord(0), coord(1)]) {
+            return Some(Err("that point has no colour to balance on".into()));
+        }
     }
     if ui.get("undo").and_then(Value::as_bool) == Some(true) {
         undo_edit(d);
@@ -1129,7 +1180,12 @@ fn draw(app: &mut PhotocraftApp, ctx: &egui::Context, own_window: bool) {
         let mut preview = ui.new_child(egui::UiBuilder::new().max_rect(view));
         preview.set_clip_rect(view.intersect(ui.clip_rect()));
         preview.painter().rect_filled(view, 0.0, t.canvas);
-        let (r, response, panning, zoom_box) = super::camera_raw_preview_ui::interact(&mut preview, navigation, view, size, &mut scope.sampler_tool);
+        // The White Balance tool behaves like the colour sampler for navigation: a click picks.
+        let mut picking = scope.sampler_tool || d.wb_pick;
+        let (r, response, panning, zoom_box) = super::camera_raw_preview_ui::interact(&mut preview, navigation, view, size, &mut picking);
+        if !picking {
+            (scope.sampler_tool, d.wb_pick) = (false, false);
+        }
         let tex = if d.show_before { d.before_tex.as_ref() } else { d.tex.as_ref() };
         if let Some(tex) = tex {
             // Never tile a checker across the offscreen extent of a highly zoomed image.
@@ -1150,7 +1206,11 @@ fn draw(app: &mut PhotocraftApp, ctx: &egui::Context, own_window: bool) {
         let toolbar = ERect::from_min_max(pos2(preview_body.left() + 16.0, view.bottom() + 8.0), preview_body.right_bottom() - vec2(16.0, 4.0));
         let mut nav_ui = ui.new_child(egui::UiBuilder::new().max_rect(toolbar).layout(egui::Layout::left_to_right(egui::Align::Center)));
         nav_ui.set_clip_rect(preview_body.intersect(ui.clip_rect()));
-        super::camera_raw_preview_ui::toolbar(&mut nav_ui, navigation, view, size, &mut scope.sampler_tool);
+        let mut picking = scope.sampler_tool || d.wb_pick;
+        super::camera_raw_preview_ui::toolbar(&mut nav_ui, navigation, view, size, &mut picking);
+        if !picking {
+            (scope.sampler_tool, d.wb_pick) = (false, false);
+        }
         if d.detail.pending() {
             nav_ui.spinner();
         }
@@ -1168,6 +1228,9 @@ fn draw(app: &mut PhotocraftApp, ctx: &egui::Context, own_window: bool) {
         d.scope.alt_tone = None;
         let mut dirty = false;
         let mut auto = false;
+        let mut auto_wb = false;
+        let mut toggle_wb = false;
+        let d_wb_pick = d.wb_pick;
         egui::ScrollArea::vertical().id_salt("camera-raw-props").show(&mut props, |ui| {
             ui.spacing_mut().item_spacing.y = 4.0;
             let p = &mut d.params;
@@ -1186,6 +1249,14 @@ fn draw(app: &mut PhotocraftApp, ctx: &egui::Context, own_window: bool) {
             });
             section(ui, "Color", false, |ui| {
                 widgets::section_label(ui, tl!("White Balance: As Shot"));
+                ui.horizontal(|ui| {
+                    if ui.selectable_label(d_wb_pick, tl!("Eyedropper")).on_hover_text(tl!("Eyedropper Tool")).clicked() {
+                        toggle_wb = true;
+                    }
+                    if ui.button(tl!("Auto")).clicked() {
+                        auto_wb = true;
+                    }
+                });
                 row(ui, &mut dirty, "Temperature", &mut p.temperature, -100.0..=100.0, Some(&ts));
                 row(ui, &mut dirty, "Tint", &mut p.tint, -100.0..=100.0, Some(&tn));
                 row(ui, &mut dirty, "Vibrance", &mut p.vibrance, -100.0..=100.0, None);
@@ -1275,6 +1346,12 @@ fn draw(app: &mut PhotocraftApp, ctx: &egui::Context, own_window: bool) {
         if auto {
             d.auto_tone();
         }
+        if auto_wb {
+            d.auto_white_balance();
+        }
+        if toggle_wb {
+            d.wb_pick = !d.wb_pick;
+        }
         super::camera_raw_scope_ui::floating(ctx, d, scope, right);
         super::camera_raw_scope_ui::shortcuts(ctx, scope);
         d.dirty |= dirty;
@@ -1319,6 +1396,15 @@ fn draw(app: &mut PhotocraftApp, ctx: &egui::Context, own_window: bool) {
         && let Some(d) = app.camera_raw.as_mut()
     {
         d.show_before = !d.show_before;
+    }
+    if !ctx.text_edit_focused()
+        && ctx.input(|i| i.key_pressed(egui::Key::I) && !i.modifiers.any())
+        && let Some(d) = app.camera_raw.as_mut()
+    {
+        d.wb_pick = !d.wb_pick;
+        if d.wb_pick {
+            app.ui.camera_raw_scope.sampler_tool = false;
+        }
     }
     if ctx.input(|i| i.key_pressed(egui::Key::Escape)) {
         action = Some("cancel");
