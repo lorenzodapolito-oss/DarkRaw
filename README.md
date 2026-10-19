@@ -1,3 +1,33 @@
+<h1 align="center">DarkRaw</h1>
+
+<p align="center">
+  <b>A fork of <a href="https://github.com/storytold/photocraft">PhotoCraft</a> focused on a Camera Raw–style editing workflow.</b><br>
+  Open source, offline, written in Rust.
+</p>
+
+## What this fork adds
+
+All of it lives in the Camera Raw dialog (**Filter › Camera Raw Filter…**, also shown when a raw file is opened):
+
+- **Auto (Light).** One click chooses Exposure, Contrast, Highlights, Shadows, Whites and Blacks from the picture. It works closed-loop on a thumbnail: each slider is solved against what the Camera Raw pipeline actually produces. The method is original; its numbers will not match any other editor's Auto. The result is one undoable edit and every slider stays adjustable.
+- **White Balance eyedropper** (button in *Color*, shortcut **I**). Click a point that should be neutral grey and Temperature and Tint are solved for it.
+- **Auto white balance.** Makes the picture's average colour neutral (grey-world estimate).
+- **Control channel.** `{"ui":{"auto":true}}`, `{"ui":{"autoWhiteBalance":true}}` and `{"ui":{"whiteBalanceAt":[x,y]}}` drive the same actions, like the rest of the dialog.
+
+Each feature has tests in `crates/algo` and `crates/ui-egui`.
+
+## Not done yet
+
+HDR merge and HDR output, in-dialog Crop and Straighten, and masking and calibration panels.
+
+## Credits and licence
+
+DarkRaw is a fork of [storytold/photocraft](https://github.com/storytold/photocraft) and keeps its licence, **MIT OR Apache-2.0** (see `LICENSE-MIT` and `LICENSE-APACHE`). It is an independent project, not affiliated with or endorsed by Adobe, and contains no Adobe code or assets. The ArtCraft and PhotoCraft names, logos and artwork in the original README below belong to their owners.
+
+---
+
+## About PhotoCraft (upstream README)
+
 <p align="center">
   <a href="https://getartcraft.com/">
     <picture>
