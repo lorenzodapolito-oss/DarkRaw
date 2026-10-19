@@ -148,7 +148,7 @@ mod tests {
 
     #[test]
     fn left_to_right_text_is_untouched_and_not_copied() {
-        for text in ["PhotoCraft", "Layer 1", "", "Background copy (2)", "日本語のレイヤー"] {
+        for text in ["DarkRaw", "Layer 1", "", "Background copy (2)", "日本語のレイヤー"] {
             assert!(matches!(visual(text), Cow::Borrowed(t) if t == text), "{text}");
         }
     }
@@ -169,16 +169,16 @@ mod tests {
         // A left-to-right name with an Arabic word at the end is left as it is.
         assert_eq!(visual("Layer 1 نص"), "Layer 1 نص");
         // Latin inside an Arabic name stays readable.
-        assert_eq!(visual("نص PhotoCraft هنا"), "هنا PhotoCraft نص");
+        assert_eq!(visual("نص DarkRaw هنا"), "هنا DarkRaw نص");
     }
 
     /// #5385 review: the title bar's line is left to right as a whole, so a right-to-left
     /// document name keeps "— PhotoCraft" after it, at the right.
     #[test]
     fn the_title_line_stays_left_to_right_around_a_right_to_left_name() {
-        assert_eq!(visual_ltr("*صورة.psd — PhotoCraft"), "*صورة.psd — PhotoCraft");
-        assert_eq!(visual_ltr("لاشي مكتوب.png — PhotoCraft"), "مكتوب لاشي.png — PhotoCraft");
-        assert!(matches!(visual_ltr("Untitled-1 — PhotoCraft"), Cow::Borrowed(_)));
+        assert_eq!(visual_ltr("*صورة.psd — DarkRaw"), "*صورة.psd — DarkRaw");
+        assert_eq!(visual_ltr("لاشي مكتوب.png — DarkRaw"), "مكتوب لاشي.png — DarkRaw");
+        assert!(matches!(visual_ltr("Untitled-1 — DarkRaw"), Cow::Borrowed(_)));
     }
 
     /// #5385 review: a right-to-left name that doesn't fit keeps its first words and ends with

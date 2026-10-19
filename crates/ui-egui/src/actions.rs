@@ -316,12 +316,8 @@ pub fn load_bytes(app: &mut PhotocraftApp, name: &str, bytes: &[u8]) -> Result<V
         crate::i18n::fmt(&crate::i18n::trn(crate::i18n::current(), n, "Loaded {n} action from {file}", "Loaded {n} actions from {file}"), &[("file", &shown)]);
     app.ui.status_error = false;
     app.ui.status = if unsupported > 0 {
-        let note = crate::i18n::trn(
-            crate::i18n::current(),
-            unsupported as u64,
-            "{n} step has no PhotoCraft equivalent yet",
-            "{n} steps have no PhotoCraft equivalent yet",
-        );
+        let note =
+            crate::i18n::trn(crate::i18n::current(), unsupported as u64, "{n} step has no DarkRaw equivalent yet", "{n} steps have no DarkRaw equivalent yet");
         let template = "{message} ({note})";
         crate::i18n::fmt(tl!(template), &[("message", &loaded), ("note", &note)])
     } else {

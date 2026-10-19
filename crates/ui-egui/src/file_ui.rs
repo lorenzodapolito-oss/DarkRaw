@@ -1019,7 +1019,7 @@ fn print_body(app: &mut PhotocraftApp, ui: &mut egui::Ui, f: &mut Map<String, Va
                 "colorHandling",
                 &[
                     ("printerManages", tl!("Printer Manages Colors")),
-                    ("photocraftManages", tl!("PhotoCraft Manages Colors")),
+                    ("photocraftManages", tl!("DarkRaw Manages Colors")),
                     ("noColorManagement", tl!("No Color Management")),
                 ],
                 240.0,

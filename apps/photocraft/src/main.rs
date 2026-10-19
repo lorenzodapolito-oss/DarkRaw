@@ -109,7 +109,7 @@ fn native_options(custom_titlebar: bool) -> eframe::NativeOptions {
     eframe::NativeOptions {
         viewport: viewport
             .with_app_id(APP_ID)
-            .with_title("PhotoCraft")
+            .with_title("DarkRaw")
             .with_inner_size([1440.0, 900.0])
             .with_min_inner_size([760.0, 480.0])
             .with_drag_and_drop(true)
@@ -168,14 +168,14 @@ fn usage_exit_code(errors: &[String]) -> Option<i32> {
 const USAGE: &str = "\
 Usage: photocraft [options] [--] [files…]
 
-Opens PhotoCraft with the given files.
+Opens DarkRaw with the given files.
 
 Options:
   -h, --help                       Print this help and exit
       --version                    Print the version, commit and build date and exit
       --safe-gpu                   Start with the CPU renderer for this launch (after a graphics driver crash)
       --in-window-menus            macOS: keep the menus inside the window instead of the menu bar
-      --new-instance               Windows and Linux: start a separate PhotoCraft instead of opening
+      --new-instance               Windows and Linux: start a separate DarkRaw instead of opening
                                    the files in the one already running
       --present-mode <mode>        How frames reach the display: fifo, autovsync or novsync
       --frame-latency <n>          Frames queued for the display: 1 to 3
@@ -510,7 +510,7 @@ fn main() -> eframe::Result {
     // and usage errors leave no file behind. Records logged until now are written to it first.
     if let (Some(logger), Some(dir)) = (logger, services::config_dir()) {
         match logger.attach_dir(&dir.join("logs")) {
-            Ok(path) => log::info!("PhotoCraft {}, log file {}", photocraft_engine::build_info::long_version(), path.display()),
+            Ok(path) => log::info!("DarkRaw {}, log file {}", photocraft_engine::build_info::long_version(), path.display()),
             // Standard error only by now (`attach_dir` gave up on the file); unlike `eprintln!`, never panics.
             Err(e) => log::warn!("no log file: {e}"),
         }
@@ -532,7 +532,7 @@ fn main() -> eframe::Result {
         };
         match (single_instance::skip_reason(&context), services::config_dir()) {
             (Some(reason), _) => {
-                log::info!("running as a separate PhotoCraft: {reason}");
+                log::info!("running as a separate DarkRaw: {reason}");
                 None
             }
             (None, None) => None,
@@ -540,12 +540,12 @@ fn main() -> eframe::Result {
                 let paths: Vec<String> = files.iter().map(|f| single_instance::absolute(f)).collect();
                 match single_instance::claim(&dir, &paths) {
                     single_instance::Launch::Forwarded => {
-                        log::info!("handed {} file(s) to the running PhotoCraft", paths.len());
+                        log::info!("handed {} file(s) to the running DarkRaw", paths.len());
                         return Ok(());
                     }
                     single_instance::Launch::Primary(primary) => Some(primary),
                     single_instance::Launch::Standalone(reason) => {
-                        log::warn!("starting a separate PhotoCraft: {reason}");
+                        log::warn!("starting a separate DarkRaw: {reason}");
                         None
                     }
                 }
@@ -702,7 +702,7 @@ fn main() -> eframe::Result {
     let created_in_callback = app_created.clone();
     let started_sentinel = sentinel.clone();
     let result = eframe::run_native(
-        "PhotoCraft",
+        "DarkRaw",
         options,
         Box::new(move |cc| {
             created_in_callback.store(true, std::sync::atomic::Ordering::Relaxed);
@@ -1015,7 +1015,7 @@ mod tests {
             .with_fullscreen(true)
             .with_maximized(true);
         let opened = hook(saved);
-        assert_eq!(opened.fullscreen, Some(false), "Standard Screen Mode is where PhotoCraft starts");
+        assert_eq!(opened.fullscreen, Some(false), "Standard Screen Mode is where DarkRaw starts");
         assert_eq!(opened.maximized, Some(true), "the rest of the saved geometry is kept");
         assert_eq!(opened.inner_size, Some(egui::vec2(2560.0, 1392.0)));
     }
