@@ -3523,6 +3523,10 @@ cameraRaw	Roughness	Pürüzlülük
 cameraRaw	Tint	Renk Tonu
 cameraRaw	Vibrance	Titreşim
 cameraRaw	Whites	Beyazlar
+cameraRaw	Geometry	Geometri
+cameraRaw	Aspect	En boy oranı
+cameraRaw	X Offset	X kaydırma
+cameraRaw	Y Offset	Y kaydırma
 	Wand	Değnek
 	Note tool	Not aracı
 	Magnetic Lasso	Manyetik Kement

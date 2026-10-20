@@ -1292,6 +1292,16 @@ fn draw(app: &mut PhotocraftApp, ctx: &egui::Context, own_window: bool) {
                 row(ui, &mut dirty, "Size", &mut p.grain_size, 0.0..=100.0, None);
                 row(ui, &mut dirty, "Roughness", &mut p.grain_roughness, 0.0..=100.0, None);
             });
+            section(ui, "Geometry", false, |ui| {
+                row(ui, &mut dirty, "Rotate", &mut p.geo_rotate, -photocraft_algo::camera_raw::ROTATE_RANGE..=photocraft_algo::camera_raw::ROTATE_RANGE, None);
+                row(ui, &mut dirty, "Distortion", &mut p.geo_distortion, -100.0..=100.0, None);
+                row(ui, &mut dirty, "Vertical", &mut p.geo_vertical, -100.0..=100.0, None);
+                row(ui, &mut dirty, "Horizontal", &mut p.geo_horizontal, -100.0..=100.0, None);
+                row(ui, &mut dirty, "Aspect", &mut p.geo_aspect, -100.0..=100.0, None);
+                row(ui, &mut dirty, "Scale", &mut p.geo_scale, -50.0..=100.0, None);
+                row(ui, &mut dirty, "X Offset", &mut p.geo_offset_x, -100.0..=100.0, None);
+                row(ui, &mut dirty, "Y Offset", &mut p.geo_offset_y, -100.0..=100.0, None);
+            });
             section(ui, "Curve", false, |ui| {
                 d.curve_rect = Some(curve_editor(ui, p, &mut dirty, &mut d.curve_state));
                 row(ui, &mut dirty, "Highlights", &mut p.curve_highlights, -100.0..=100.0, None);

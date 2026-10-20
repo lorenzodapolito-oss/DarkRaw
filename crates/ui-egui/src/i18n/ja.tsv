@@ -2252,6 +2252,10 @@ cameraRaw	Blending	ブレンド
 cameraRaw	Blacks	黒レベル
 cameraRaw	Amount	適用量
 cameraRaw	Color	カラー
+cameraRaw	Geometry	ジオメトリ
+cameraRaw	Aspect	アスペクト
+cameraRaw	X Offset	X オフセット
+cameraRaw	Y Offset	Y オフセット
 	Patch Tool	パッチツール
 	Patch:	パッチ:
 	Lasso around an area, then drag the selection	投げ縄で範囲を囲み、選択範囲をドラッグします

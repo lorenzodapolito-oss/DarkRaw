@@ -3180,6 +3180,10 @@ cameraRaw	Luminance Detail	Detalle de luminancia
 cameraRaw	Color Detail	Detalle de color
 cameraRaw	Roughness	Rugosidad
 cameraRaw	Whites	Blancos
+cameraRaw	Geometry	Geometría
+cameraRaw	Aspect	Proporción
+cameraRaw	X Offset	Desplazamiento X
+cameraRaw	Y Offset	Desplazamiento Y
 layerLabel	No Color	Sin color
 	Preferences…	Preferencias…
 	Actual Pixels	Píxeles reales

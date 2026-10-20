@@ -56,6 +56,8 @@ pub fn validate_curve(points: &[[f32; 2]]) -> Result<(), String> {
 use crate::photo_util::{hash01, linear_to_srgb, par_rows, srgb_to_linear};
 
 mod auto;
+mod geometry;
+pub use geometry::ROTATE_RANGE;
 mod local_tone;
 mod white_balance;
 mod whites_blacks;
@@ -171,6 +173,17 @@ pub struct CameraRaw {
     pub vignette_highlights: f32,
     /// `highlightPriority | colorPriority | paintOverlay`.
     pub vignette_style: String,
+    // Geometry (−100..=100 unless noted): the layer keeps its size.
+    pub geo_distortion: f32,
+    pub geo_vertical: f32,
+    pub geo_horizontal: f32,
+    /// Straighten, in degrees (−10..=10).
+    pub geo_rotate: f32,
+    pub geo_aspect: f32,
+    /// Change from 100 % (−50..=100).
+    pub geo_scale: f32,
+    pub geo_offset_x: f32,
+    pub geo_offset_y: f32,
     pub seed: u32,
     /// Pixel-size multiplier for previews on downsampled proxies (radii in px scale by it).
     pub pixel_scale: f32,
@@ -230,6 +243,14 @@ impl Default for CameraRaw {
             vignette_feather: 50.0,
             vignette_highlights: 0.0,
             vignette_style: "highlightPriority".into(),
+            geo_distortion: 0.0,
+            geo_vertical: 0.0,
+            geo_horizontal: 0.0,
+            geo_rotate: 0.0,
+            geo_aspect: 0.0,
+            geo_scale: 0.0,
+            geo_offset_x: 0.0,
+            geo_offset_y: 0.0,
             seed: 0,
             pixel_scale: 1.0,
             encoding_gamma: 0.0,
@@ -564,6 +585,7 @@ impl CameraRaw {
             && self.noise_color == 0.0
             && self.grain_amount == 0.0
             && self.vignette_amount == 0.0
+            && self.geometry_neutral()
     }
 }
 
@@ -761,6 +783,8 @@ pub fn develop(px: &mut [[f32; 4]], w: usize, h: usize, p: &CameraRaw, float: bo
             }
         });
     }
+    // 10. Geometry: resample last, so grain and vignette move with the picture.
+    geometry::geometry(px, w, h, p);
     if !float {
         for q in px.iter_mut() {
             for c in 0..3 {

@@ -2940,6 +2940,10 @@ cameraRaw	Temperature	Температура
 cameraRaw	Tint	Відтінок
 cameraRaw	Whites	Білі тони
 cameraRaw	Masking	Маскування
+cameraRaw	Geometry	Геометрія
+cameraRaw	Aspect	Пропорції
+cameraRaw	X Offset	Зсув по X
+cameraRaw	Y Offset	Зсув по Y
 	Label	Мітка
 	Date and Time	Дата й час
 	Scale Units	Одиниці масштабу

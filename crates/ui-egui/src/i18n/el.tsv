@@ -3319,6 +3319,10 @@ cameraRaw	Tint	Χρωματική απόχρωση
 cameraRaw	Vibrance	Ζωντάνια χρωμάτων
 cameraRaw	Whites	Λευκά
 cameraRaw	Yellow	Κίτρινο
+cameraRaw	Geometry	Γεωμετρία
+cameraRaw	Aspect	Λόγος διαστάσεων
+cameraRaw	X Offset	Μετατόπιση Χ
+cameraRaw	Y Offset	Μετατόπιση Υ
 
 # Greek tool names, original English in parentheses
 	Ruler Tool	Χάρακας (Ruler Tool)

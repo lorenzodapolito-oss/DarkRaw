@@ -2671,6 +2671,11 @@ cameraRaw	Amount	Jumlah
 cameraRaw	Tint	Rona
 cameraRaw	Masking	Masking
 cameraRaw	Blending	Pembauran
+cameraRaw	Geometry	Geometri
+cameraRaw	Aspect	Rasio aspek
+cameraRaw	X Offset	Offset X
+cameraRaw	Y Offset	Offset Y
+cameraRaw	Distortion	Distorsi
 	Patch Tool	Alat Patch
 	Patch:	Patch:
 	Lasso around an area, then drag the selection	Lingkari area dengan lasso, lalu seret seleksinya

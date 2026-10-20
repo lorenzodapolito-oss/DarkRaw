@@ -2601,6 +2601,10 @@ cameraRaw	Tint	Színezet
 cameraRaw	Vibrance	Élénkség
 cameraRaw	Whites	Fehérek
 cameraRaw	Yellow	Sárga
+cameraRaw	Geometry	Geometria
+cameraRaw	Aspect	Képarány
+cameraRaw	X Offset	X eltolás
+cameraRaw	Y Offset	Y eltolás
 
 # Dialogs, preferences and file formats
 	% of all commits	Commitok aránya (%)

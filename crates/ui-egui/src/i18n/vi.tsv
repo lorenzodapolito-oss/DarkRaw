@@ -1717,6 +1717,10 @@ cameraRaw	Midpoint	Điểm giữa
 cameraRaw	Roundness	Độ tròn
 cameraRaw	Roughness	Độ thô
 cameraRaw	Size	Kích thước
+cameraRaw	Geometry	Hình học
+cameraRaw	Aspect	Tỷ lệ khung hình
+cameraRaw	X Offset	Độ lệch X
+cameraRaw	Y Offset	Độ lệch Y
 
 # Phase 4.13 — New Document + Home + Image Size
 	Home	Trang chủ

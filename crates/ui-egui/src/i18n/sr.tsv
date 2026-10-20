@@ -4140,6 +4140,10 @@ cameraRaw	Feather	Omekšavanje
 cameraRaw	Midpoint	Središte
 cameraRaw	Roundness	Zaobljenost
 cameraRaw	Size	Veličina
+cameraRaw	Geometry	Geometrija
+cameraRaw	Aspect	Odnos stranica
+cameraRaw	X Offset	Pomeraj X
+cameraRaw	Y Offset	Pomeraj Y
 
 # New Document, Home and Image Size
 	Default Photoshop Size	Podrazumevana Photoshop veličina

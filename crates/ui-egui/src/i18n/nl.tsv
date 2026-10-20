@@ -3550,6 +3550,10 @@ cameraRaw	Roughness	Ruwheid
 cameraRaw	Tint	Tint
 cameraRaw	Vibrance	Levendigheid
 cameraRaw	Whites	Witten
+cameraRaw	Geometry	Geometrie
+cameraRaw	Aspect	Beeldverhouding
+cameraRaw	X Offset	X-verschuiving
+cameraRaw	Y Offset	Y-verschuiving
 	Wand	Toverstaf
 	Note tool	Notitiegereedschap
 	Magnetic Lasso	Magnetische lasso

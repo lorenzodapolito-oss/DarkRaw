@@ -12,13 +12,14 @@ All of it lives in the Camera Raw dialog (**Filter › Camera Raw Filter…**, a
 - **Auto (Light).** One click chooses Exposure, Contrast, Highlights, Shadows, Whites and Blacks from the picture. It works closed-loop on a thumbnail: each slider is solved against what the Camera Raw pipeline actually produces. The method is original; its numbers will not match any other editor's Auto. The result is one undoable edit and every slider stays adjustable.
 - **White Balance eyedropper** (button in *Color*, shortcut **I**). Click a point that should be neutral grey and Temperature and Tint are solved for it.
 - **Auto white balance.** Makes the picture's average colour neutral (grey-world estimate).
+- **Geometry panel** (*Rotate*, *Distortion*, *Vertical*, *Horizontal*, *Aspect*, *Scale*, *X Offset*, *Y Offset*). Straightens and corrects perspective inside the dialog. The layer keeps its size, so the areas the picture no longer covers become transparent (a filter cannot change the canvas). Settings: `geoRotate` (−10…10°), `geoDistortion`, `geoVertical`, `geoHorizontal`, `geoAspect`, `geoScale` (change from 100 %), `geoOffsetX`, `geoOffsetY`.
 - **Control channel.** `{"ui":{"auto":true}}`, `{"ui":{"autoWhiteBalance":true}}` and `{"ui":{"whiteBalanceAt":[x,y]}}` drive the same actions, like the rest of the dialog.
 
 Each feature has tests in `crates/algo` and `crates/ui-egui`.
 
 ## Not done yet
 
-HDR merge and HDR output, in-dialog Crop and Straighten, and masking and calibration panels.
+HDR merge and HDR output, a real Crop (changing the canvas size), and masking and calibration panels.
 
 ## Credits and licence
 

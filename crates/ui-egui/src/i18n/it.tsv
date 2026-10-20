@@ -4290,6 +4290,15 @@ cameraRaw	Curve	Curva
 cameraRaw	Dehaze	Elimina foschia
 cameraRaw	Detail	Dettaglio
 cameraRaw	Effects	Effetti
+cameraRaw	Geometry	Geometria
+cameraRaw	Rotate	Rotazione
+cameraRaw	Distortion	Distorsione
+cameraRaw	Vertical	Verticale
+cameraRaw	Horizontal	Orizzontale
+cameraRaw	Aspect	Proporzioni
+cameraRaw	Scale	Scala
+cameraRaw	X Offset	Spostamento X
+cameraRaw	Y Offset	Spostamento Y
 cameraRaw	Exposure	Esposizione
 cameraRaw	Feather	Sfumatura
 cameraRaw	Highlights	Luci

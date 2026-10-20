@@ -2719,6 +2719,10 @@ cameraRaw	Luminance Detail	Detalhe da luminância
 cameraRaw	Color Detail	Detalhe da cor
 cameraRaw	Roughness	Aspereza
 cameraRaw	Whites	Brancos
+cameraRaw	Geometry	Geometria
+cameraRaw	Aspect	Proporção
+cameraRaw	X Offset	Deslocamento X
+cameraRaw	Y Offset	Deslocamento Y
 	No patterns	Nenhum padrão
 	Enable {name}	Ativar {name}
 	Hold Alt while drawing for straight segments	Segure Alt ao desenhar para segmentos retos

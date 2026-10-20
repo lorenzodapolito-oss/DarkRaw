@@ -2483,6 +2483,10 @@ layerLabel	No Color	Keine Farbe
 	Edits that change the whole document, such as a layer's blend mode, opacity or visibility, redraw all of it.	Änderungen, die das ganze Dokument betreffen, etwa Füllmethode, Deckkraft oder Sichtbarkeit einer Ebene, zeichnen es vollständig neu.
 	The GPU compositor wasn't used: {reason}	Der GPU-Compositor wurde nicht verwendet: {reason}
 cameraRaw	Light	Licht
+cameraRaw	Geometry	Geometrie
+cameraRaw	Aspect	Seitenverhältnis
+cameraRaw	X Offset	X-Versatz
+cameraRaw	Y Offset	Y-Versatz
 fontWeight	Thin	Haarfein
 fontWeight	ExtraLight	Extraleicht
 fontWeight	Light	Leicht

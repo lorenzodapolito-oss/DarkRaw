@@ -2697,6 +2697,11 @@ cameraRaw	Amount	Quantité
 cameraRaw	Tint	Teinte
 cameraRaw	Masking	Masquage
 cameraRaw	Blending	Fusion
+cameraRaw	Geometry	Géométrie
+cameraRaw	Aspect	Proportions
+cameraRaw	X Offset	Décalage X
+cameraRaw	Y Offset	Décalage Y
+cameraRaw	Distortion	Distorsion
 	Patch Tool	Outil Pièce
 	Patch:	Pièce :
 	Lasso around an area, then drag the selection	Entourez une zone au lasso, puis faites glisser la sélection

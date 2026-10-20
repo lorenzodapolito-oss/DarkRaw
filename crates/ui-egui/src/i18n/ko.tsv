@@ -2229,6 +2229,10 @@ cameraRaw	Blending	혼합
 cameraRaw	Blacks	검정 계열
 cameraRaw	Amount	양
 cameraRaw	Color	색상
+cameraRaw	Geometry	기하학
+cameraRaw	Aspect	가로 세로 비율
+cameraRaw	X Offset	X 오프셋
+cameraRaw	Y Offset	Y 오프셋
 	Patch Tool	패치 도구
 	Patch:	패치:
 	Lasso around an area, then drag the selection	올가미로 영역을 둘러싼 다음 선택 영역을 드래그하세요

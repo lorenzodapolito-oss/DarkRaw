@@ -2725,6 +2725,10 @@ cameraRaw	Hue	Odcień
 cameraRaw	Luminance Detail	Szczegóły luminancji
 cameraRaw	Color Detail	Szczegóły koloru
 cameraRaw	Roughness	Chropowatość
+cameraRaw	Geometry	Geometria
+cameraRaw	Aspect	Proporcje
+cameraRaw	X Offset	Przesunięcie X
+cameraRaw	Y Offset	Przesunięcie Y
 	Patch Tool	Narzędzie Łatka
 	Patch:	Łatka:
 	Lasso around an area, then drag the selection	Zakreśl obszar lassem, a następnie przeciągnij zaznaczenie
