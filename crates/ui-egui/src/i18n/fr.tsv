@@ -3243,3 +3243,10 @@ curves	Smooth	Lisser
 	Increase Brush Size	Augmenter la taille du pinceau
 	Decrease Brush Hardness	Réduire la dureté du pinceau
 	Increase Brush Hardness	Augmenter la dureté du pinceau
+	Crop Frame	Cadre de recadrage
+	No Frame	Aucun cadre
+	Swap	Inverser
+	Reset Frame	Réinitialiser le cadre
+	Always show grid	Toujours afficher la grille
+	Turn the frame between portrait and landscape	Basculer le cadre entre portrait et paysage
+	The frame crops when a raw file is opened; a filter keeps the layer's size.	Le cadre recadre à l'ouverture d'un fichier raw ; un filtre conserve la taille du calque.

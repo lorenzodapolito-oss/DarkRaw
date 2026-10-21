@@ -1132,6 +1132,40 @@ pub fn slider_row_prec(
     r
 }
 
+/// A one-line [`slider_row`]: `Label  ----o----  [value]`, 18 pt tall, so a panel with many
+/// sliders (Camera Raw's) shows more of them at once. [`slider_row`] stacks the label and the
+/// field over a full-width slider instead.
+pub fn slider_row_compact(ui: &mut Ui, label: &str, value: &mut f32, range: std::ops::RangeInclusive<f32>, suffix: &str, gradient: Option<&[Color32]>) -> Response {
+    const LABEL_W: f32 = 84.0;
+    const FIELD_W: f32 = 48.0;
+    const ROW_H: f32 = 18.0;
+    let t = Tokens::get(ui.ctx());
+    let mut field = None;
+    let mut slider = None;
+    ui.horizontal(|ui| {
+        ui.spacing_mut().item_spacing.x = 4.0;
+        // The label scrubs the row's field, as in the stacked row.
+        let l = ui.add_sized([LABEL_W, ROW_H], egui::Label::new(egui::RichText::new(tl!(label)).color(t.text_dim)).truncate());
+        scrub_label_within(ui, &l, f32::INFINITY);
+        ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+            field = Some(value_field_box(ui, value, range.clone(), suffix, vec2(FIELD_W, ROW_H), 0.0, FieldOpts::default()).0);
+            let w = ui.available_width().max(40.0);
+            slider = Some(ui.allocate_ui(vec2(w, ROW_H), |ui| slider_with(ui, value, range.clone(), gradient, RowGestures::default())).inner);
+        });
+    });
+    // The slider is always laid out above; the fallback only keeps this free of a panic path.
+    let mut r = slider.unwrap_or_else(|| ui.allocate_response(vec2(0.0, 0.0), Sense::hover()));
+    if let Some(f) = field {
+        if f.changed() {
+            r.mark_changed();
+        }
+        // A scrub of the field or its label is one drag, like the slider's, for history.
+        use egui::response::Flags;
+        r.flags |= f.flags & (Flags::DRAG_STARTED | Flags::DRAGGED | Flags::DRAG_STOPPED);
+    }
+    r
+}
+
 /// iOS-style toggle switch.
 pub fn toggle(ui: &mut Ui, on: &mut bool, label: &str) -> Response {
     let t = Tokens::get(ui.ctx());

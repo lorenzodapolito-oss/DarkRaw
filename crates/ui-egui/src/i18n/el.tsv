@@ -3934,3 +3934,10 @@ curves	Smooth	Εξομάλυνση
 	Increase Brush Size	Αύξηση μεγέθους πινέλου
 	Decrease Brush Hardness	Μείωση σκληρότητας πινέλου
 	Increase Brush Hardness	Αύξηση σκληρότητας πινέλου
+	Crop Frame	Πλαίσιο περικοπής
+	No Frame	Χωρίς πλαίσιο
+	Swap	Εναλλαγή
+	Reset Frame	Επαναφορά πλαισίου
+	Always show grid	Πάντα εμφάνιση πλέγματος
+	Turn the frame between portrait and landscape	Εναλλαγή του πλαισίου μεταξύ κάθετου και οριζόντιου
+	The frame crops when a raw file is opened; a filter keeps the layer's size.	Το πλαίσιο περικόπτει όταν ανοίγει ένα αρχείο raw· ένα φίλτρο διατηρεί το μέγεθος του επιπέδου.

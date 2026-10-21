@@ -3942,3 +3942,10 @@ curves	Smooth	Згладити
 	This shape layer must be rasterized before proceeding. It will no longer be editable as a shape. Rasterize the shape?	Щоб продовжити, потрібно растеризувати цей шар фігури. Після цього його більше не можна буде редагувати як фігуру. Растеризувати фігуру?
 	This Smart Object must be rasterized before proceeding. Its contents will no longer be editable. Rasterize the Smart Object?	Щоб продовжити, потрібно растеризувати цей смартоб’єкт. Після цього його вміст більше не можна буде редагувати. Растеризувати смартоб’єкт?
 	This fill layer must be rasterized before proceeding. Its fill content will no longer be editable. Rasterize the layer?	Щоб продовжити, потрібно растеризувати цей шар заливки. Після цього його заливку більше не можна буде редагувати. Растеризувати шар?
+	Crop Frame	Рамка кадрування
+	No Frame	Без рамки
+	Swap	Поміняти
+	Reset Frame	Скинути рамку
+	Always show grid	Завжди показувати сітку
+	Turn the frame between portrait and landscape	Перемкнути рамку між портретною й альбомною орієнтацією
+	The frame crops when a raw file is opened; a filter keeps the layer's size.	Рамка обрізає знімок під час відкриття raw-файлу; фільтр зберігає розмір шару.

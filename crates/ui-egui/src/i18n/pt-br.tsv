@@ -4024,3 +4024,10 @@ layerLabel	No Color	Sem cor
 	Increase Brush Size	Aumentar tamanho do pincel
 	Decrease Brush Hardness	Diminuir dureza do pincel
 	Increase Brush Hardness	Aumentar dureza do pincel
+	Crop Frame	Moldura de corte
+	No Frame	Sem moldura
+	Swap	Trocar
+	Reset Frame	Redefinir moldura
+	Always show grid	Sempre mostrar a grade
+	Turn the frame between portrait and landscape	Alternar a moldura entre retrato e paisagem
+	The frame crops when a raw file is opened; a filter keeps the layer's size.	A moldura corta ao abrir um arquivo raw; um filtro mantém o tamanho da camada.

@@ -4307,3 +4307,10 @@ shape	Appearance	Izgled
 	Increase Brush Size	Povećaj veličinu četkice
 	Decrease Brush Hardness	Smanji tvrdoću četkice
 	Increase Brush Hardness	Povećaj tvrdoću četkice
+	Crop Frame	Okvir za isecanje
+	No Frame	Bez okvira
+	Swap	Zameni
+	Reset Frame	Vrati okvir
+	Always show grid	Uvek prikaži mrežu
+	Turn the frame between portrait and landscape	Prebaci okvir između uspravnog i vodoravnog položaja
+	The frame crops when a raw file is opened; a filter keeps the layer's size.	Okvir iseca sliku pri otvaranju raw datoteke; filter zadržava veličinu sloja.

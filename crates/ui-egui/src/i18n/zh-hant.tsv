@@ -2843,3 +2843,10 @@ curves	Smooth	平滑
 	Increase Brush Size	放大筆刷大小
 	Decrease Brush Hardness	降低筆刷硬度
 	Increase Brush Hardness	提高筆刷硬度
+	Crop Frame	裁切框
+	No Frame	無裁切框
+	Swap	交換
+	Reset Frame	重設裁切框
+	Always show grid	一律顯示格線
+	Turn the frame between portrait and landscape	在直向與橫向之間切換裁切框
+	The frame crops when a raw file is opened; a filter keeps the layer's size.	開啟 raw 檔案時依裁切框裁切；濾鏡會保持圖層大小不變。

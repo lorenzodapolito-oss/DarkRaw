@@ -3721,3 +3721,10 @@ curves	Smooth	Làm mượt
 	Increase Brush Size	Tăng kích thước cọ
 	Decrease Brush Hardness	Giảm độ cứng của cọ
 	Increase Brush Hardness	Tăng độ cứng của cọ
+	Crop Frame	Khung cắt
+	No Frame	Không khung
+	Swap	Đổi chiều
+	Reset Frame	Đặt lại khung
+	Always show grid	Luôn hiện lưới
+	Turn the frame between portrait and landscape	Chuyển khung giữa dọc và ngang
+	The frame crops when a raw file is opened; a filter keeps the layer's size.	Khung cắt khi mở tệp raw; bộ lọc giữ nguyên kích thước lớp.

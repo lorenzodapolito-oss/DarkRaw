@@ -4356,3 +4356,11 @@ shape	Appearance	Aspetto
 	GPU Memory (MB, 0 = Automatic)	Memoria GPU (MB, 0 = Automatico)
 	{name} was changed by another app after it was opened or saved here.	{name} è stato modificato da un'altra app dopo essere stato aperto o salvato qui.
 	Replace it with this document, or cancel and use File › Save As to keep both.	Sostituiscilo con questo documento, oppure annulla e usa File › Salva con nome per tenerli entrambi.
+	Crop Frame	Cornice di ritaglio
+	No Frame	Nessuna cornice
+	Swap	Inverti
+	Reset Frame	Reimposta cornice
+	Always show grid	Mostra sempre la griglia
+	Turn the frame between portrait and landscape	Passa la cornice da orizzontale a verticale e viceversa
+	The frame crops when a raw file is opened; a filter keeps the layer's size.	La cornice ritaglia all'apertura di un file raw; un filtro mantiene le dimensioni del livello.
+	1 : 1 (Square)	1 : 1 (Quadrato)

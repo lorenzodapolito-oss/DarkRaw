@@ -4153,3 +4153,10 @@ cameraRaw	Y Offset	Y eltolás
 	Increase Brush Size	Ecsetméret növelése
 	Decrease Brush Hardness	Ecsetkeménység csökkentése
 	Increase Brush Hardness	Ecsetkeménység növelése
+	Crop Frame	Vágókeret
+	No Frame	Nincs keret
+	Swap	Csere
+	Reset Frame	Keret visszaállítása
+	Always show grid	Rács mindig látható
+	Turn the frame between portrait and landscape	A keret váltása álló és fekvő között
+	The frame crops when a raw file is opened; a filter keeps the layer's size.	A keret raw fájl megnyitásakor vág; a szűrő megtartja a réteg méretét.

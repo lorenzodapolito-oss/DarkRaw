@@ -3964,3 +3964,10 @@ cameraData	Lens	Lens
 	Increase Brush Size	Fırça boyutunu büyüt
 	Decrease Brush Hardness	Fırça sertliğini azalt
 	Increase Brush Hardness	Fırça sertliğini artır
+	Crop Frame	Kırpma çerçevesi
+	No Frame	Çerçeve yok
+	Swap	Değiştir
+	Reset Frame	Çerçeveyi sıfırla
+	Always show grid	Izgarayı her zaman göster
+	Turn the frame between portrait and landscape	Çerçeveyi dikey ve yatay arasında değiştir
+	The frame crops when a raw file is opened; a filter keeps the layer's size.	Çerçeve, bir raw dosyası açılırken kırpar; bir filtre katman boyutunu korur.

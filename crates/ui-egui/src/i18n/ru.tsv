@@ -3208,3 +3208,10 @@ curves	Smooth	Сгладить
 	Increase Brush Size	Увеличить размер кисти
 	Decrease Brush Hardness	Уменьшить жёсткость кисти
 	Increase Brush Hardness	Увеличить жёсткость кисти
+	Crop Frame	Рамка кадрирования
+	No Frame	Без рамки
+	Swap	Поменять
+	Reset Frame	Сбросить рамку
+	Always show grid	Всегда показывать сетку
+	Turn the frame between portrait and landscape	Переключить рамку между портретной и альбомной ориентацией
+	The frame crops when a raw file is opened; a filter keeps the layer's size.	Рамка обрезает снимок при открытии raw-файла; фильтр сохраняет размер слоя.

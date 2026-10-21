@@ -3415,3 +3415,10 @@ curves	Smooth	매끄럽게
 	Increase Brush Size	브러시 크기 늘리기
 	Decrease Brush Hardness	브러시 경도 줄이기
 	Increase Brush Hardness	브러시 경도 늘리기
+	Crop Frame	자르기 프레임
+	No Frame	프레임 없음
+	Swap	바꾸기
+	Reset Frame	프레임 초기화
+	Always show grid	항상 격자 표시
+	Turn the frame between portrait and landscape	프레임을 세로와 가로로 전환
+	The frame crops when a raw file is opened; a filter keeps the layer's size.	프레임은 raw 파일을 열 때 잘라냅니다. 필터는 레이어 크기를 유지합니다.

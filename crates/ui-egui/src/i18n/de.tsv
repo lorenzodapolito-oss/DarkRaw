@@ -3234,3 +3234,10 @@ curves	Smooth	Glätten
 	GPU Memory (MB, 0 = Automatic)	GPU-Speicher (MB, 0 = Automatisch)
 	{name} was changed by another app after it was opened or saved here.	{name} wurde von einer anderen App geändert, nachdem es hier geöffnet oder gespeichert wurde.
 	Replace it with this document, or cancel and use File › Save As to keep both.	Ersetze die Datei durch dieses Dokument oder brich ab und nutze Datei › Speichern unter, um beide zu behalten.
+	Crop Frame	Zuschneiderahmen
+	No Frame	Kein Rahmen
+	Swap	Tauschen
+	Reset Frame	Rahmen zurücksetzen
+	Always show grid	Raster immer anzeigen
+	Turn the frame between portrait and landscape	Rahmen zwischen Hoch- und Querformat wechseln
+	The frame crops when a raw file is opened; a filter keeps the layer's size.	Der Rahmen schneidet beim Öffnen einer Raw-Datei zu; ein Filter behält die Ebenengröße.

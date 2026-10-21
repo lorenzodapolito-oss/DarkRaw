@@ -3994,3 +3994,10 @@ curves	Smooth	Vloeiend maken
 	Increase Brush Size	Penseelgrootte vergroten
 	Decrease Brush Hardness	Penseelhardheid verlagen
 	Increase Brush Hardness	Penseelhardheid verhogen
+	Crop Frame	Uitsnijkader
+	No Frame	Geen kader
+	Swap	Wisselen
+	Reset Frame	Kader herstellen
+	Always show grid	Raster altijd tonen
+	Turn the frame between portrait and landscape	Kader wisselen tussen staand en liggend
+	The frame crops when a raw file is opened; a filter keeps the layer's size.	Het kader snijdt bij als een raw-bestand wordt geopend; een filter behoudt de laaggrootte.

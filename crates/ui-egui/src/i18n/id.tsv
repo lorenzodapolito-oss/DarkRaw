@@ -3230,3 +3230,10 @@ curves	Smooth	Haluskan
 	Increase Brush Size	Perbesar ukuran kuas
 	Decrease Brush Hardness	Kurangi kekerasan kuas
 	Increase Brush Hardness	Tambah kekerasan kuas
+	Crop Frame	Bingkai pangkas
+	No Frame	Tanpa bingkai
+	Swap	Tukar
+	Reset Frame	Setel ulang bingkai
+	Always show grid	Selalu tampilkan kisi
+	Turn the frame between portrait and landscape	Ubah bingkai antara potret dan lanskap
+	The frame crops when a raw file is opened; a filter keeps the layer's size.	Bingkai memangkas saat file raw dibuka; filter mempertahankan ukuran layer.

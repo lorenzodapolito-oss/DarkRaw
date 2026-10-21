@@ -3833,3 +3833,10 @@ curves	Smooth	Wygładź
 	Increase Brush Size	Zwiększ rozmiar pędzla
 	Decrease Brush Hardness	Zmniejsz twardość pędzla
 	Increase Brush Hardness	Zwiększ twardość pędzla
+	Crop Frame	Ramka kadrowania
+	No Frame	Bez ramki
+	Swap	Zamień
+	Reset Frame	Resetuj ramkę
+	Always show grid	Zawsze pokazuj siatkę
+	Turn the frame between portrait and landscape	Przełącz ramkę między pionową a poziomą
+	The frame crops when a raw file is opened; a filter keeps the layer's size.	Ramka kadruje przy otwieraniu pliku raw; filtr zachowuje rozmiar warstwy.

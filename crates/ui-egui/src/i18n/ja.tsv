@@ -3911,3 +3911,10 @@ curves	Smooth	スムーズ
 	Increase Brush Size	ブラシサイズを大きく
 	Decrease Brush Hardness	ブラシの硬さを下げる
 	Increase Brush Hardness	ブラシの硬さを上げる
+	Crop Frame	切り抜きフレーム
+	No Frame	フレームなし
+	Swap	入れ替え
+	Reset Frame	フレームをリセット
+	Always show grid	常にグリッドを表示
+	Turn the frame between portrait and landscape	フレームを縦向きと横向きで切り替える
+	The frame crops when a raw file is opened; a filter keeps the layer's size.	フレームは raw ファイルを開くときに切り抜きます。フィルターはレイヤーのサイズを保ちます。

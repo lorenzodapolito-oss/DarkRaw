@@ -25,7 +25,7 @@ use crate::theme::Tokens;
 use crate::widgets;
 
 const PROXY_SIDE: usize = 900;
-const PANEL_W: f32 = 330.0;
+const PANEL_W: f32 = 300.0;
 const BANDS: [&str; 8] = ["Red", "Orange", "Yellow", "Green", "Aqua", "Blue", "Purple", "Magenta"];
 
 pub struct CameraRawDialog {
@@ -76,6 +76,10 @@ pub struct CameraRawDialog {
     edit_origin: Option<CameraRaw>,
     /// The White Balance (eyedropper) tool is armed: a click on the preview picks a neutral.
     pub(crate) wb_pick: bool,
+    /// The crop frame and guide grid over the preview (Geometry panel).
+    crop: super::camera_raw_crop_ui::CropFrame,
+    /// A Geometry slider is being dragged: the grid shows over the picture.
+    geo_active: bool,
 }
 
 impl CameraRawDialog {
@@ -118,6 +122,7 @@ impl CameraRawDialog {
         result["hoverSample"] = json!(self.hover_sample(view.vectorscope));
         result["vectorscopeRect"] = json!(self.scope.vectorscope_rect.map(|r| [r.left(), r.top(), r.right(), r.bottom()]));
         result["scopeRect"] = json!(self.scope.rect.map(|r| [r.left(), r.top(), r.right(), r.bottom()]));
+        result["crop"] = super::camera_raw_crop_ui::describe(&self.crop, (self.full_w, self.full_h), self.target == Target::OpenRaw);
         result
     }
 
@@ -268,6 +273,9 @@ pub struct RawOpen {
     pub path: Option<String>,
     /// The file, when it was opened from bytes (no path to read it again from).
     pub bytes: Option<std::sync::Arc<Vec<u8>>>,
+    /// The crop frame chosen in the dialog, as `[x, y, width, height]` in pixels: the document is
+    /// cropped to it once the raw is developed.
+    pub crop: Option<[i32; 4]>,
 }
 
 /// Should an interactive open of `name` show the open-time Camera Raw dialog? `warnings` are
@@ -290,6 +298,7 @@ pub fn queue_open_dialog(app: &mut PhotocraftApp, name: &str, path: Option<&str>
             name: name.to_string(),
             path: path.map(str::to_string),
             bytes: bytes.map(|b| std::sync::Arc::new(b.to_vec())),
+            crop: None,
         });
     }
 }
@@ -479,11 +488,27 @@ fn finish_open_raw(app: &mut PhotocraftApp, index: usize, rest: CameraRaw, redev
             && let (Some(job), Some(raw)) = (r.get("job").and_then(Value::as_u64), raw)
         {
             app.raw_redevelop = Some(Redevelop { job: photocraft_engine::jobs::JobId(job), params: rest.clone(), raw: raw.clone(), filter_step: true });
+            // The crop follows when the filter lands ([`on_redevelop_event`]).
+            result["filter"] = r;
+            mark_unmodified(app, index);
+            return Ok(result);
         }
         result["filter"] = r;
     }
+    if let Some(raw) = raw {
+        apply_crop(app, index, raw);
+    }
     mark_unmodified(app, index);
     Ok(result)
+}
+
+/// Crop the developed document to the frame chosen in the open-time dialog.
+fn apply_crop(app: &mut PhotocraftApp, index: usize, raw: &RawOpen) {
+    let Some([x, y, width, height]) = raw.crop else { return };
+    app.session.set_active(index);
+    if let Err(e) = app.run("image.crop", json!({"x": x, "y": y, "width": width, "height": height})) {
+        crate::notices::error(app, format!("{}: {e}", raw.name));
+    }
 }
 
 fn mark_unmodified(app: &mut PhotocraftApp, index: usize) {
@@ -506,6 +531,7 @@ pub fn on_redevelop_event(app: &mut PhotocraftApp, e: &photocraft_engine::jobs::
         if matches!(e.outcome, photocraft_engine::jobs::JobOutcome::Done(_))
             && let Some(index) = e.document.and_then(|id| document_index(app, id))
         {
+            apply_crop(app, index, &pending.raw);
             mark_unmodified(app, index);
         }
         // The usual filter reporting still applies.
@@ -710,6 +736,8 @@ fn open_pixels(
         redo: Vec::new(),
         edit_origin: None,
         wb_pick: false,
+        crop: Default::default(),
+        geo_active: false,
     };
     d.render(ctx);
     app.camera_raw = Some(d);
@@ -816,6 +844,13 @@ fn menu_update(app: &mut PhotocraftApp, ctx: &egui::Context, ui: &Value) -> Opti
         },
         None => None,
     };
+    let crop = match ui.get("crop") {
+        Some(c) => match super::camera_raw_crop_ui::prepare(&d.crop, c, (d.full_w as f32, d.full_h as f32), d.target == Target::OpenRaw) {
+            Ok(next) => Some(next),
+            Err(e) => return Some(Err(e)),
+        },
+        None => None,
+    };
     let navigation = match ui.get("view") {
         Some(view) => match super::camera_raw_preview_ui::prepare(app.ui.camera_raw_preview, view) {
             Ok(next) => Some(next),
@@ -826,6 +861,9 @@ fn menu_update(app: &mut PhotocraftApp, ctx: &egui::Context, ui: &Value) -> Opti
     let d = app.camera_raw.as_mut()?;
     if let Some(view) = navigation {
         app.ui.camera_raw_preview = view;
+    }
+    if let Some(next) = crop {
+        d.crop = next;
     }
     if d.params.point_curve != next_params.point_curve {
         d.curve_state = Default::default();
@@ -989,7 +1027,8 @@ fn commit(app: &mut PhotocraftApp) -> Result<Value, String> {
             app.run("layer.smartFilter.setParams", json!({"layer": d.layer.0, "index": index, "params": params}))?
         }
         Target::OpenRaw => {
-            let raw = d.raw_open.clone().ok_or("no raw file is being opened")?;
+            let mut raw = d.raw_open.clone().ok_or("no raw file is being opened")?;
+            raw.crop = d.crop.pixels(d.full_w, d.full_h);
             let params = d.params.clone();
             commit_open_raw(app, &params, &raw)?
         }
@@ -1011,7 +1050,7 @@ fn row(ui: &mut egui::Ui, dirty: &mut bool, label: &str, v: &mut f32, range: std
 }
 
 fn slider(ui: &mut egui::Ui, dirty: &mut bool, label: &str, v: &mut f32, range: std::ops::RangeInclusive<f32>, grad: Option<&[Color32]>) -> egui::Response {
-    let r = widgets::slider_row(ui, crate::i18n::tr_ctx(crate::i18n::current(), "cameraRaw", label), v, range, "", grad);
+    let r = widgets::slider_row_compact(ui, crate::i18n::tr_ctx(crate::i18n::current(), "cameraRaw", label), v, range, "", grad);
     if r.changed() {
         *dirty = true;
     }
@@ -1020,6 +1059,13 @@ fn slider(ui: &mut egui::Ui, dirty: &mut bool, label: &str, v: &mut f32, range: 
         *dirty = true;
     }
     r
+}
+
+/// A Geometry slider; `active` is set while it is dragged, which shows the grid over the picture.
+fn geo_row(ui: &mut egui::Ui, dirty: &mut bool, active: &mut bool, label: &str, v: &mut f32, range: std::ops::RangeInclusive<f32>) {
+    if slider(ui, dirty, label, v, range, None).dragged() {
+        *active = true;
+    }
 }
 
 /// A Light tone slider; Alt-dragging it shows that zone's channel clipping on the preview.
@@ -1186,7 +1232,10 @@ fn draw(app: &mut PhotocraftApp, ctx: &egui::Context, own_window: bool) {
         if !picking {
             (scope.sampler_tool, d.wb_pick) = (false, false);
         }
+        // Moving the picture under the crop frame draws it shifted, so the frame stays put.
+        let r = d.crop.shifted(r);
         let tex = if d.show_before { d.before_tex.as_ref() } else { d.tex.as_ref() };
+        let has_tex = tex.is_some();
         if let Some(tex) = tex {
             // Never tile a checker across the offscreen extent of a highly zoomed image.
             widgets::checker(preview.painter(), r.intersect(view), 8.0);
@@ -1199,6 +1248,12 @@ fn draw(app: &mut PhotocraftApp, ctx: &egui::Context, own_window: bool) {
             }
             d.scope.preview_rect = Some(r);
             super::camera_raw_scope_ui::preview(&mut preview, d, scope, r, &response, panning);
+        }
+        if has_tex {
+            super::camera_raw_crop_ui::paint(preview.painter(), &d.crop, r, d.geo_active || d.crop.grid_always);
+            if !picking && super::camera_raw_crop_ui::interact(&mut preview, &mut d.crop, r, (d.full_w as f32, d.full_h as f32)) {
+                ctx.request_repaint();
+            }
         }
         if let Some(region) = zoom_box {
             preview.painter().rect_stroke(region, 0.0, egui::Stroke::new(1.0, t.accent), egui::StrokeKind::Inside);
@@ -1230,9 +1285,12 @@ fn draw(app: &mut PhotocraftApp, ctx: &egui::Context, own_window: bool) {
         let mut auto = false;
         let mut auto_wb = false;
         let mut toggle_wb = false;
+        let mut geo_active = false;
+        let crop_ok = d.target == Target::OpenRaw;
+        let picture = (d.full_w as f32, d.full_h as f32);
         let d_wb_pick = d.wb_pick;
         egui::ScrollArea::vertical().id_salt("camera-raw-props").show(&mut props, |ui| {
-            ui.spacing_mut().item_spacing.y = 4.0;
+            ui.spacing_mut().item_spacing.y = 2.0;
             let p = &mut d.params;
             let alt = &mut d.scope.alt_tone;
             let (ts, tn) = (temp_stops(), tint_stops());
@@ -1293,14 +1351,16 @@ fn draw(app: &mut PhotocraftApp, ctx: &egui::Context, own_window: bool) {
                 row(ui, &mut dirty, "Roughness", &mut p.grain_roughness, 0.0..=100.0, None);
             });
             section(ui, "Geometry", false, |ui| {
-                row(ui, &mut dirty, "Rotate", &mut p.geo_rotate, -photocraft_algo::camera_raw::ROTATE_RANGE..=photocraft_algo::camera_raw::ROTATE_RANGE, None);
-                row(ui, &mut dirty, "Distortion", &mut p.geo_distortion, -100.0..=100.0, None);
-                row(ui, &mut dirty, "Vertical", &mut p.geo_vertical, -100.0..=100.0, None);
-                row(ui, &mut dirty, "Horizontal", &mut p.geo_horizontal, -100.0..=100.0, None);
-                row(ui, &mut dirty, "Aspect", &mut p.geo_aspect, -100.0..=100.0, None);
-                row(ui, &mut dirty, "Scale", &mut p.geo_scale, -50.0..=100.0, None);
-                row(ui, &mut dirty, "X Offset", &mut p.geo_offset_x, -100.0..=100.0, None);
-                row(ui, &mut dirty, "Y Offset", &mut p.geo_offset_y, -100.0..=100.0, None);
+                let rotate = -photocraft_algo::camera_raw::ROTATE_RANGE..=photocraft_algo::camera_raw::ROTATE_RANGE;
+                geo_row(ui, &mut dirty, &mut geo_active, "Rotate", &mut p.geo_rotate, rotate);
+                geo_row(ui, &mut dirty, &mut geo_active, "Distortion", &mut p.geo_distortion, -100.0..=100.0);
+                geo_row(ui, &mut dirty, &mut geo_active, "Vertical", &mut p.geo_vertical, -100.0..=100.0);
+                geo_row(ui, &mut dirty, &mut geo_active, "Horizontal", &mut p.geo_horizontal, -100.0..=100.0);
+                geo_row(ui, &mut dirty, &mut geo_active, "Aspect", &mut p.geo_aspect, -100.0..=100.0);
+                geo_row(ui, &mut dirty, &mut geo_active, "Scale", &mut p.geo_scale, -50.0..=100.0);
+                geo_row(ui, &mut dirty, &mut geo_active, "X Offset", &mut p.geo_offset_x, -100.0..=100.0);
+                geo_row(ui, &mut dirty, &mut geo_active, "Y Offset", &mut p.geo_offset_y, -100.0..=100.0);
+                super::camera_raw_crop_ui::controls(ui, &mut d.crop, picture, crop_ok);
             });
             section(ui, "Curve", false, |ui| {
                 d.curve_rect = Some(curve_editor(ui, p, &mut dirty, &mut d.curve_state));
@@ -1353,6 +1413,10 @@ fn draw(app: &mut PhotocraftApp, ctx: &egui::Context, own_window: bool) {
                 row(ui, &mut dirty, "Color Detail", &mut p.noise_color_detail, 0.0..=100.0, None);
             });
         });
+        if geo_active != d.geo_active {
+            d.geo_active = geo_active;
+            ctx.request_repaint();
+        }
         if auto {
             d.auto_tone();
         }
@@ -1764,7 +1828,7 @@ mod tests {
         app.open_bytes("c.dng", &dng).unwrap();
         assert!(app.pending_raw_open.is_none());
         // A non-raw never queues the dialog; a closed document is an error, not a panic.
-        assert!(open_raw(&mut app, &ctx, RawOpen { document: photocraft_doc::DocId(u64::MAX), name: "x".into(), path: None, bytes: None }).is_err());
+        assert!(open_raw(&mut app, &ctx, RawOpen { document: photocraft_doc::DocId(u64::MAX), name: "x".into(), path: None, bytes: None, crop: None }).is_err());
     }
 
     #[test]
