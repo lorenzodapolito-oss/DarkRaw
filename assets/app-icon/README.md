@@ -1,40 +1,34 @@
-# PhotoCraft app icon
+# DarkRaw app icon
 
-A **nine-tailed kitsune with a brow diamond**: an engraving portrait, seated, looking back at the
-viewer, in the Crafting Apps' owl-template framing (full-bleed field, head and body filling the
-tile, tails running off the edges).
-
-## Palette
-
-Exactly three colours:
-
-| Colour | Hex | Used for |
-|---|---|---|
-| Ink | `#0b0b0c` | line work and contours |
-| Paper | `#efe9dc` | the figure |
-| PhotoCraft blue (app colour) | `#2f7bf5` | the full-bleed field |
+A **camera aperture with six blades** in a cyan-to-magenta gradient, inside a glowing ring, on a
+dark navy rounded-square tile.
 
 ## Geometry
 
-A 512-unit tile (`viewBox="0 0 512 512"`), rounded square with `rx=112`, no border. The macOS
-renders pad it onto Apple's 824/1024 icon grid; the Windows and Linux renders crop 22 units off
-each side so the figure reads at 16–48 px.
+The source is a 1024 px picture of the tile on a dark backdrop (`darkraw-source.jpg`). The tile is
+cut out and its corners made transparent (corner radius about 22.5 % of the side). The macOS renders
+pad it onto Apple's 824/1024 icon grid; the Windows and Linux renders use the tile edge to edge.
 
 ## Provenance
 
-The owner's original drawing, made in ArtCraft (2880 px, engraving style, keyed to the palette),
-vectorised with craftrules `assets/logo-options/_tools/vectorize_tile.py`. The source PNG stays in
-craftrules at `assets/app-icons/photocraft/source.png`. License: see `LICENSE.txt`.
+Generated with ChatGPT (OpenAI) from a prompt by the DarkRaw project owner, who supplied it as
+`darkraw-source.jpg`. Purely AI-generated images may not be protected by copyright in some
+countries. License: see `LICENSE.txt`.
 
 ## Files
 
-- `photocraft.svg`: canonical master (traced at 2048 px).
-- `photocraft-small.svg`: lighter trace (traced at 1024 px); also the hicolor scalable icon.
+- `darkraw-source.jpg`: the source picture every other file is rendered from.
 - `photocraft-1024.png`: 1024 px render on the macOS grid.
 - `photocraft.icns`: macOS bundle icon (`CFBundleIconFile`).
 - `photocraft.ico`: Windows icon, 16–256 px, embedded in the `.exe` by `apps/photocraft/build.rs`.
-- `hicolor/<size>/apps/ai.storyteller.photocraft.png` (16–512) and `hicolor/scalable/...svg`:
-  Linux icon theme.
+- `hicolor/<size>/apps/ai.storyteller.photocraft.png` (16–512) and `hicolor/scalable/...svg`
+  (the 512 px render wrapped in an SVG): Linux icon theme.
+- `photocraft.svg`, `photocraft-small.svg`: the previous PhotoCraft artwork, kept only because a test
+  in `crates/io/src/svg.rs` opens `photocraft.svg` as a sample file and the macOS DMG background
+  links `photocraft-small.svg`. They are not used for the app icon any more.
+
+The file names keep the `photocraft` prefix so `build.rs`, the packaging scripts and the tests keep
+finding them.
 
 The app also sets the window icon and Wayland app ID at runtime (`apps/photocraft/src/app_icon.rs`,
 `main.rs`). On Windows the taskbar shows the icon of the Start Menu shortcut that launches the
@@ -43,5 +37,6 @@ details and tests the `.ico` sizes and the WiX icon references.
 
 ## Regenerate
 
-Replace `photocraft.svg` (and `photocraft-small.svg`), then run `packaging/icons.sh`. It needs
-`resvg`, plus `iconutil` on macOS; the `.ico` is packed by `cargo xtask ico`.
+Replace `darkraw-source.jpg`, adjust `TILE_BOX` in `packaging/icons.py` if the tile sits elsewhere,
+then run `packaging/icons.sh` (or `python packaging/icons.py`). It needs only Pillow and writes the
+`.ico` and `.icns` itself.
