@@ -8,8 +8,8 @@ Needs only Pillow (pip install pillow). The outputs are committed, so packaging 
 The source is a 1024 px picture of a rounded-square tile on a dark backdrop. The tile is cut out
 (TILE_BOX), its corners made transparent, and then rendered two ways, as the old SVG-based script did:
 
-  * macOS (photocraft-1024.png, photocraft.icns): the tile padded onto Apple's 824/1024 body grid.
-  * Windows and Linux (photocraft.ico, hicolor/*): the tile edge to edge, no padding (TIGHT_CROP can
+  * macOS (darkraw-1024.png, darkraw.icns): the tile padded onto Apple's 824/1024 body grid.
+  * Windows and Linux (darkraw.ico, hicolor/*): the tile edge to edge, no padding (TIGHT_CROP can
     crop it further if the aperture needs to read bigger at 16-48 px).
 
 photocraft.svg and photocraft-small.svg are NOT touched: a test in crates/io/src/svg.rs opens
@@ -93,7 +93,7 @@ def write_icns(path: Path, tile: Image.Image) -> None:
 def main() -> None:
     tile = masked_tile()
 
-    mac(tile, 1024).save(DIR / "photocraft-1024.png", optimize=True)
+    mac(tile, 1024).save(DIR / "darkraw-1024.png", optimize=True)
 
     for s in HICOLOR:
         d = DIR / "hicolor" / f"{s}x{s}" / "apps"
@@ -110,8 +110,8 @@ def main() -> None:
         encoding="utf-8",
     )
 
-    write_ico(DIR / "photocraft.ico", [tight(tile, s) for s in ICO_SIZES])
-    write_icns(DIR / "photocraft.icns", tile)
+    write_ico(DIR / "darkraw.ico", [tight(tile, s) for s in ICO_SIZES])
+    write_icns(DIR / "darkraw.icns", tile)
     print(f"icons written to {DIR}")
 
 

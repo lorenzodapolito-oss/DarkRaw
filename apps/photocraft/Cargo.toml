@@ -3,9 +3,15 @@ name = "photocraft"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
-default-run = "photocraft"
+default-run = "darkraw"
 description = "DarkRaw: an open-source, native image editor"
 build = "build.rs"
+
+# The program is darkraw(.exe); the package keeps its internal name so the workspace stays easy to
+# merge with the upstream project.
+[[bin]]
+name = "darkraw"
+path = "src/main.rs"
 
 [features]
 # Open HEIC/HEIF photos (the optional photocraft-heif crate). Not default so distributors choose
@@ -101,5 +107,5 @@ name = "mac_menu_appkit"
 harness = false
 
 [build-dependencies]
-# Icon + VERSIONINFO for photocraft.exe; build.rs only uses it when targeting Windows.
+# Icon + VERSIONINFO for darkraw.exe; build.rs only uses it when targeting Windows.
 winresource = "0.1"

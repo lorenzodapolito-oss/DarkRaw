@@ -20,8 +20,8 @@ install -Dm755 "$HERE/AppRun" "$APPDIR/AppRun"
 install -Dm644 "$HERE/$APP_ID.desktop" "$APPDIR/usr/share/applications/$APP_ID.desktop"
 mkdir -p "$APPDIR/usr/share/icons"
 cp -R "$ROOT/assets/app-icon/hicolor" "$APPDIR/usr/share/icons/"
-printf '#!/bin/sh\necho "stub: $*"\n' >"$APPDIR/usr/bin/photocraft"
-chmod +x "$APPDIR/usr/bin/photocraft"
+printf '#!/bin/sh\necho "stub: $*"\n' >"$APPDIR/usr/bin/darkraw"
+chmod +x "$APPDIR/usr/bin/darkraw"
 
 APPIMAGE="$TMP/photocraft test.AppImage" # spaces on purpose: Exec must stay quoted
 : >"$APPIMAGE"
@@ -139,7 +139,7 @@ am_desktop="$XDG_DATA_HOME/applications/photocraft-AM.desktop"
 printf '[Desktop Entry]
 Type=Application
 Name=PhotoCraft
-Exec=photocraft %%F
+Exec=darkraw %%F
 Icon=%s
 ' "$APP_ID" >"$am_desktop"
 "$APPDIR/AppRun" >/dev/null || fail "launch with AM launcher exited non-zero"

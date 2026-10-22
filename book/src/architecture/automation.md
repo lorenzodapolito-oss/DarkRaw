@@ -3,7 +3,7 @@
 PhotoCraft exposes the same engine through several transports:
 
 ```text
-photocraft-cli commands/run/batch
+darkraw-cli commands/run/batch
              |
 MCP stdio ---+--> photocraft-automation::Headless --> engine Session
 

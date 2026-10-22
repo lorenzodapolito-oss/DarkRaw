@@ -9,7 +9,7 @@ list them for Debian/Ubuntu, Fedora, Arch and openSUSE.
 ```sh
 cargo build --workspace
 cargo run --release -p photocraft -- image.psd
-cargo run -p photocraft-cli -- --help
+cargo run -p darkraw-cli -- --help
 ```
 
 The standard repository gates are:

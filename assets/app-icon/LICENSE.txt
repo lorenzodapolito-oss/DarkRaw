@@ -1,5 +1,5 @@
 DarkRaw app icon (darkraw-source.jpg and every file derived from it in this directory:
-photocraft-1024.png, photocraft.icns, photocraft.ico, hicolor/).
+darkraw-1024.png, darkraw.icns, darkraw.ico, hicolor/).
 
 Generated with ChatGPT (OpenAI) from a prompt by the DarkRaw project owner. Under OpenAI's terms
 the output belongs to the user; in some countries a purely AI-generated image may not be protected

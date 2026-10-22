@@ -78,7 +78,7 @@ in `ci.yml`. Rules: `../craftrules/standards/fonts.md`; build option: `docs/deve
 - `Info.plist` is generated from `Info.plist.in`. The bundle id is `ai.storyteller.photocraft`.
   The plist sets `LSMinimumSystemVersion` 11.0, `NSHighResolutionCapable`, and document types:
   `.pcraft` (Owner), plus PSD/PSB and the image formats PhotoCraft reads (Alternate, so it never
-  takes over Preview's defaults). The icon is `assets/app-icon/photocraft.icns`.
+  takes over Preview's defaults). The icon is `assets/app-icon/darkraw.icns`.
 - **Signing** goes inside-out with the hardened runtime and a secure timestamp. The executable
   is signed first, then the bundle. There's no `--deep` on the final signature. The
   entitlements (`entitlements.plist`) are deliberately empty.
@@ -121,13 +121,13 @@ redistributable, which matters for a standalone installer and costs only about 1
 goes in `CARGO_TARGET_<TRIPLE>_RUSTFLAGS`, so host build scripts aren't affected.
 
 - `apps/photocraft/build.rs` and `apps/photocraft-cli/build.rs` embed the icon
-  (`assets/app-icon/photocraft.ico`) and VERSIONINFO with the `winresource` crate
+  (`assets/app-icon/darkraw.ico`) and VERSIONINFO with the `winresource` crate
   (build dependency `0.1`). They only do this when targeting Windows. Elsewhere each
   script is a no-op, even if `PHOTOCRAFT_REQUIRE_WINRES` is set, and the web build
   doesn't touch that crate. Both set ProductName to PhotoCraft, CompanyName to
   Learning Machines LLC and the same copyright line. The GUI description is
-  "PhotoCraft image editor" (`photocraft.exe`). The CLI description is
-  "PhotoCraft command-line interface", with OriginalFilename `photocraft-cli.exe`
+  "PhotoCraft image editor" (`darkraw.exe`). The CLI description is
+  "PhotoCraft command-line interface", with OriginalFilename `darkraw-cli.exe`
   and InternalName `photocraft-cli`. Version strings are the Cargo package version,
   so a pre-release tag is kept; the numeric file and product versions are
   winresource's `major.minor.patch.0`. A missing resource compiler warns, so an
@@ -152,10 +152,10 @@ goes in `CARGO_TARGET_<TRIPLE>_RUSTFLAGS`, so host build scripts aren't affected
   as the cached icon filename, and an extensionless filename can render as a blank document
   icon. `packaging/windows/check-icons.ps1` checks the references and extensions in CI;
   `package.ps1` also validates the built MSI with ICE50 before signing it.
-- **Portable zip:** it ships `packaging/windows/portable.txt` beside `photocraft.exe`. That
-  marker (or a `PhotoCraft.portable` file) switches on portable mode: preferences, presets,
-  recovery autosaves and the GPU startup marker go to `PhotoCraftData\` next to the exe instead
-  of `%APPDATA%\Photocraft`. If that folder isn't writable the app warns and uses `%APPDATA%`.
+- **Portable zip:** it ships `packaging/windows/portable.txt` beside `darkraw.exe`. That
+  marker (or a `DarkRaw.portable` file) switches on portable mode: preferences, presets,
+  recovery autosaves and the GPU startup marker go to `DarkRawData\` next to the exe instead
+  of `%APPDATA%\DarkRaw`. If that folder isn't writable the app warns and uses `%APPDATA%`.
   The MSI has no marker. The logic is in `apps/photocraft/src/app_dirs.rs` and works the same
   on macOS and Linux.
 - **Signing:** `packaging/windows/sign.ps1` signs both `.exe` files and then the `.msi` with

@@ -18,9 +18,9 @@ countries. License: see `LICENSE.txt`.
 ## Files
 
 - `darkraw-source.jpg`: the source picture every other file is rendered from.
-- `photocraft-1024.png`: 1024 px render on the macOS grid.
-- `photocraft.icns`: macOS bundle icon (`CFBundleIconFile`).
-- `photocraft.ico`: Windows icon, 16–256 px, embedded in the `.exe` by `apps/photocraft/build.rs`.
+- `darkraw-1024.png`: 1024 px render on the macOS grid.
+- `darkraw.icns`: macOS bundle icon (`CFBundleIconFile`).
+- `darkraw.ico`: Windows icon, 16–256 px, embedded in the `.exe` by `apps/photocraft/build.rs`.
 - `hicolor/<size>/apps/ai.storyteller.photocraft.png` (16–512) and `hicolor/scalable/...svg`
   (the 512 px render wrapped in an SVG): Linux icon theme.
 - `photocraft.svg`, `photocraft-small.svg`: the previous PhotoCraft artwork, kept only because a test

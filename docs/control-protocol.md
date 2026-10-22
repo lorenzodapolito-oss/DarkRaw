@@ -245,13 +245,13 @@ keyboard shortcuts, hidden and coloured menu items, autosave interval and crash 
 log text file. GPU on/off and the GPU tile size apply at the next launch.
 
 The desktop app stores them in `preferences.json` in the platform config directory (macOS
-`~/Library/Application Support/Photocraft`, Windows `%APPDATA%\Photocraft`, Linux
+`~/Library/Application Support/Photocraft`, Windows `%APPDATA%\DarkRaw`, Linux
 `$XDG_CONFIG_HOME/photocraft`; override with `PHOTOCRAFT_CONFIG_DIR`); autosaves go to its
-`Recovery` folder (on Windows to `%LOCALAPPDATA%\Photocraft\Recovery`, out of the roaming
+`Recovery` folder (on Windows to `%LOCALAPPDATA%\DarkRaw\Recovery`, out of the roaming
 profile; autosaves left by earlier versions move there at startup), and the window size and
 position, the dock width and floating-panel geometry
-to `ui.ron` beside it (a file holding values that would crash startup is discarded). In portable mode (a `portable.txt` or `PhotoCraft.portable` file beside the
-executable, as in the Windows portable zip) that directory is `PhotoCraftData` next to the
+to `ui.ron` beside it (a file holding values that would crash startup is discarded). In portable mode (a `portable.txt` or `DarkRaw.portable` file beside the
+executable, as in the Windows portable zip) that directory is `DarkRawData` next to the
 executable instead. The web build keeps them in `localStorage`. A save writes only the values
 this instance changed since it last loaded or saved them over what storage holds now, so a second
 browser tab (or app window) never reverts the other's changes; for a value changed in both, the

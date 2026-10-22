@@ -101,8 +101,8 @@ notarize() {
 echo "==> assembling $APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 # Executable and icon carry the display name (CFBundleExecutable / CFBundleIconFile).
-cp "$WORK/bin/photocraft" "$APP/Contents/MacOS/PhotoCraft"
-cp "$ROOT/assets/app-icon/photocraft.icns" "$APP/Contents/Resources/PhotoCraft.icns"
+cp "$WORK/bin/darkraw" "$APP/Contents/MacOS/PhotoCraft"
+cp "$ROOT/assets/app-icon/darkraw.icns" "$APP/Contents/Resources/PhotoCraft.icns"
 # Licences of the embedded craft-fonts fonts (only when built with CRAFT_FONTS_DIR).
 if [ -n "${CRAFT_FONTS_DIR:-}" ]; then
   mkdir -p "$APP/Contents/Resources/Licenses"
@@ -158,7 +158,7 @@ fi
 echo "==> building $CLI_ZIP"
 CLI_DIR="$WORK/photocraft-cli-$VERSION-macos-$ARCH"
 mkdir -p "$CLI_DIR"
-cp "$WORK/bin/photocraft-cli" "$CLI_DIR/"
+cp "$WORK/bin/darkraw-cli" "$CLI_DIR/"
 copy_docs "$CLI_DIR"
 # Same Developer ID and hardened runtime as the app, with an explicit reverse-DNS identifier
 # (codesign would otherwise use the bare file name).
@@ -170,6 +170,6 @@ ditto -c -k --keepParent "$CLI_DIR" "$CLI_ZIP"
 # Gatekeeper looks the notarization up online when a quarantined copy first runs.
 if [ "$NOTARIZE" = 1 ]; then notarize "$CLI_ZIP"; fi
 
-"$WORK/bin/photocraft-cli" --version
+"$WORK/bin/darkraw-cli" --version
 echo "==> done (check the artifacts as shipped with packaging/macos/verify.sh --arch $ARCH)"
 ls -lh "$DMG" "$CLI_ZIP"

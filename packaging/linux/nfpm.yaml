@@ -66,11 +66,11 @@ overrides:
       - xdg-desktop-portal
 
 contents:
-  - src: ${STAGE}/usr/bin/photocraft
-    dst: /usr/bin/photocraft
+  - src: ${STAGE}/usr/bin/darkraw
+    dst: /usr/bin/darkraw
     file_info: { mode: 0755 }
-  - src: ${STAGE}/usr/bin/photocraft-cli
-    dst: /usr/bin/photocraft-cli
+  - src: ${STAGE}/usr/bin/darkraw-cli
+    dst: /usr/bin/darkraw-cli
     file_info: { mode: 0755 }
   - src: ${STAGE}/usr/share/
     dst: /usr/share/

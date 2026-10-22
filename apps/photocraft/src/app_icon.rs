@@ -1,6 +1,6 @@
 //! The app icon, everywhere Windows, macOS and Linux show one (#248).
 //!
-//! - **Executable:** `build.rs` embeds `assets/app-icon/photocraft.ico` (16–256 px) as icon
+//! - **Executable:** `build.rs` embeds `assets/app-icon/darkraw.ico` (16–256 px) as icon
 //!   resource 1, which Explorer, Alt+Tab and an unpinned taskbar button fall back to.
 //! - **Window:** [`window_icon`] sets the title-bar and taskbar icon at runtime (`WM_SETICON` on
 //!   Windows, `_NET_WM_ICON` on X11, the Dock when running unbundled on macOS).
@@ -46,7 +46,7 @@ fn in_app_bundle(exe: &std::path::Path) -> bool {
 }
 
 #[cfg(target_os = "macos")]
-const PNG: &[u8] = include_bytes!("../../../assets/app-icon/photocraft-1024.png");
+const PNG: &[u8] = include_bytes!("../../../assets/app-icon/darkraw-1024.png");
 #[cfg(not(target_os = "macos"))]
 const PNG: &[u8] = include_bytes!("../../../assets/app-icon/hicolor/256x256/apps/ai.storyteller.photocraft.png");
 
@@ -54,7 +54,7 @@ const PNG: &[u8] = include_bytes!("../../../assets/app-icon/hicolor/256x256/apps
 mod tests {
     use super::*;
 
-    const ICO: &[u8] = include_bytes!("../../../assets/app-icon/photocraft.ico");
+    const ICO: &[u8] = include_bytes!("../../../assets/app-icon/darkraw.ico");
     const WXS: &str = include_str!("../../../packaging/windows/photocraft.wxs");
 
     fn u16_at(b: &[u8], i: usize) -> usize {
@@ -112,7 +112,7 @@ mod tests {
             sizes.push(w);
         }
         for want in [16, 24, 32, 48, 64, 256] {
-            assert!(sizes.contains(&want), "photocraft.ico lacks {want}px (has {sizes:?})");
+            assert!(sizes.contains(&want), "darkraw.ico lacks {want}px (has {sizes:?})");
         }
     }
 
@@ -144,7 +144,7 @@ mod tests {
             let icon = attr(s, "Icon").expect("shortcuts name their icon");
             assert!(icons.contains(&icon), "shortcut icon {icon} isn't an <Icon>");
             if attr(s, "Advertise") == Some("yes") {
-                // Every shortcut in the MSI targets photocraft.exe.
+                // Every shortcut in the MSI targets darkraw.exe.
                 assert!(icon.ends_with(".exe"), "advertised shortcut icon {icon} must end in .exe like its target (ICE50)");
             }
         }

@@ -3,10 +3,10 @@
   Make a portable DarkRaw folder and zip from a release build. No installer tools needed.
 
 .DESCRIPTION
-  Copies target\release\photocraft.exe (as DarkRaw.exe), photocraft-cli.exe when it exists,
+  Copies target\release\darkraw.exe (as DarkRaw.exe), darkraw-cli.exe when it exists,
   portable.txt and the licenses into dist\DarkRaw-portable, then zips it. portable.txt next to the
   exe switches on portable mode: preferences, presets and crash-recovery files go to the
-  PhotoCraftData folder beside the exe and nothing is written to %APPDATA% (see app_dirs.rs).
+  DarkRawData folder beside the exe and nothing is written to %APPDATA% (see app_dirs.rs).
 
   Build first:  cargo build --release -p photocraft
   Then:         powershell -ExecutionPolicy Bypass -File packaging\windows\make-portable.ps1
@@ -22,9 +22,9 @@ param(
 $ErrorActionPreference = 'Stop'
 $Root = Resolve-Path (Join-Path $PSScriptRoot '..\..')
 
-$Exe = Join-Path $Bin 'photocraft.exe'
+$Exe = Join-Path $Bin 'darkraw.exe'
 if (-not (Test-Path $Exe)) {
-  throw "photocraft.exe not found in $Bin. Run: cargo build --release -p photocraft"
+  throw "darkraw.exe not found in $Bin. Run: cargo build --release -p photocraft"
 }
 
 if (Test-Path $Out) { Remove-Item -Recurse -Force $Out }
@@ -32,7 +32,7 @@ New-Item -ItemType Directory -Force -Path $Out | Out-Null
 $Out = Resolve-Path $Out
 
 Copy-Item $Exe (Join-Path $Out 'DarkRaw.exe')
-$Cli = Join-Path $Bin 'photocraft-cli.exe'
+$Cli = Join-Path $Bin 'darkraw-cli.exe'
 if (Test-Path $Cli) { Copy-Item $Cli $Out }
 Copy-Item (Join-Path $PSScriptRoot 'portable.txt') $Out
 foreach ($f in 'LICENSE-MIT', 'LICENSE-APACHE', 'ATTRIBUTION.md') {

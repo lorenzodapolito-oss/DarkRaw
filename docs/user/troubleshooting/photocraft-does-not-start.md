@@ -24,11 +24,11 @@ On Windows, PhotoCraft starts Intel graphics on DirectX 12. If PhotoCraft closed
 
 If PhotoCraft still closes on every start, force DirectX 12 from PowerShell:
 
-1. Open PowerShell in the folder that contains `photocraft.exe`.
+1. Open PowerShell in the folder that contains `darkraw.exe`.
 2. Run these three lines:
 
         $env:WGPU_BACKEND = "dx12"
-        & .\photocraft.exe
+        & .\darkraw.exe
         Remove-Item Env:WGPU_BACKEND
 
 The last line clears the setting so later launches use the default again. You need the first two lines each time you start PhotoCraft this way. While `WGPU_BACKEND` is set, PhotoCraft uses it and does not step down to a safer mode by itself ([issue 2320](https://github.com/storytold/photocraft/issues/2320)).
@@ -50,9 +50,9 @@ See [Get help with a problem](get-help.md). Say which graphics card you have, wh
 
 - If you can open PhotoCraft: the text from **Help › System Info…**.
 - If PhotoCraft does not open at all: the log file `photocraft.log`, plus the faulting module and exception code from Event Viewer on Windows. PhotoCraft keeps it in a `logs` folder inside its settings folder:
-  - Windows: `%APPDATA%\Photocraft\logs\photocraft.log`
+  - Windows: `%APPDATA%\DarkRaw\logs\photocraft.log`
   - macOS: `~/Library/Application Support/Photocraft/logs/photocraft.log`
   - Linux: `~/.config/photocraft/logs/photocraft.log`
-  - Portable copy (a `portable.txt` file next to the program): the `PhotoCraftData\logs` folder next to the program.
+  - Portable copy (a `portable.txt` file next to the program): the `DarkRawData\logs` folder next to the program.
 
   Every start moves the previous log to `photocraft.1.log`. If you already started PhotoCraft again after the crash, attach `photocraft.1.log` too, because it holds the run that crashed.

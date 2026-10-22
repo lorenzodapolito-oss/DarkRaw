@@ -61,9 +61,9 @@ STAGE="$WORK/root"
 rm -rf "$WORK"
 
 # ---- stage an FHS tree (shared by every format) -------------------------------------------------
-install -Dm755 "$BIN/photocraft" "$STAGE/usr/bin/photocraft"
-install -Dm755 "$BIN/photocraft-cli" "$STAGE/usr/bin/photocraft-cli"
-"${CROSS_COMPILE:-}strip" "$STAGE/usr/bin/photocraft" "$STAGE/usr/bin/photocraft-cli" 2>/dev/null || true
+install -Dm755 "$BIN/darkraw" "$STAGE/usr/bin/darkraw"
+install -Dm755 "$BIN/darkraw-cli" "$STAGE/usr/bin/darkraw-cli"
+"${CROSS_COMPILE:-}strip" "$STAGE/usr/bin/darkraw" "$STAGE/usr/bin/darkraw-cli" 2>/dev/null || true
 install -Dm644 "$HERE/$APP_ID.desktop" "$STAGE/usr/share/applications/$APP_ID.desktop"
 install -Dm644 "$HERE/$APP_ID.mime.xml" "$STAGE/usr/share/mime/packages/$APP_ID.xml"
 mkdir -p "$STAGE/usr/share/metainfo"
@@ -175,9 +175,9 @@ if has appimage; then
 fi
 
 if [ -z "${CROSS_TARGET:-}" ]; then
-  "$STAGE/usr/bin/photocraft-cli" --version
+  "$STAGE/usr/bin/darkraw-cli" --version
 elif [ -n "${EMULATOR:-}" ]; then
-  "$EMULATOR" "$STAGE/usr/bin/photocraft-cli" --version
+  "$EMULATOR" "$STAGE/usr/bin/darkraw-cli" --version
 fi
 echo "==> done"
 ls -lh "$DIST"

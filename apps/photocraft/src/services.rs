@@ -291,7 +291,7 @@ fn block_on<T>(future: impl Future<Output = T>) -> T {
     }
 }
 
-/// Per-user settings directory: `PHOTOCRAFT_CONFIG_DIR`, else `<exe dir>/PhotoCraftData` in
+/// Per-user settings directory: `PHOTOCRAFT_CONFIG_DIR`, else `<exe dir>/DarkRawData` in
 /// portable mode, else the platform convention. Everything the app persists lives under it
 /// except, on Windows, crash-recovery autosaves; see [`crate::app_dirs`].
 pub fn config_dir() -> Option<PathBuf> {
@@ -480,7 +480,7 @@ pub fn xwayland_command(flatpak_id: Option<&str>, appimage: Option<&str>, x_disp
     if let Some(id) = flatpak_id.filter(|id| !id.is_empty()) {
         return Some(format!("flatpak run --nosocket=wayland --socket=x11 {}", shell_word(id)));
     }
-    let exe = appimage.filter(|path| !path.is_empty()).map_or_else(|| "photocraft".to_string(), shell_word);
+    let exe = appimage.filter(|path| !path.is_empty()).map_or_else(|| "darkraw".to_string(), shell_word);
     x_display.then(|| format!("WAYLAND_DISPLAY= {exe}"))
 }
 
@@ -796,8 +796,8 @@ mod tests {
         let bare = xwayland_command(None, Some("/opt/photocraft-0.3.0-linux-x86_64.AppImage"), true);
         assert_eq!(bare.as_deref(), Some("WAYLAND_DISPLAY= /opt/photocraft-0.3.0-linux-x86_64.AppImage"));
         // deb, rpm, AUR, tarball: the binary on the PATH.
-        assert_eq!(xwayland_command(None, None, true).as_deref(), Some("WAYLAND_DISPLAY= photocraft"));
-        assert_eq!(xwayland_command(Some(""), Some(""), true).as_deref(), Some("WAYLAND_DISPLAY= photocraft"));
+        assert_eq!(xwayland_command(None, None, true).as_deref(), Some("WAYLAND_DISPLAY= darkraw"));
+        assert_eq!(xwayland_command(Some(""), Some(""), true).as_deref(), Some("WAYLAND_DISPLAY= darkraw"));
         // No X server (XWayland disabled): nothing to suggest.
         assert_eq!(xwayland_command(None, Some("/opt/p.AppImage"), false), None);
     }

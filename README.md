@@ -1,29 +1,67 @@
+<p align="center">
+  <img alt="DarkRaw icon" src="assets/app-icon/hicolor/256x256/apps/ai.storyteller.photocraft.png" width="128" height="128">
+</p>
+
 <h1 align="center">DarkRaw</h1>
 
 <p align="center">
-  <b>A fork of <a href="https://github.com/storytold/photocraft">PhotoCraft</a> focused on a Camera Raw–style editing workflow.</b><br>
-  Open source, offline, written in Rust.
+  <b>DarkRaw.it, by Lorenzo D'Apolito: a fork of <a href="https://github.com/storytold/photocraft">PhotoCraft</a> built around a Camera Raw–style editing workflow.</b><br>
+  Open source, offline, written in Rust. No HDR.
 </p>
 
-## What this fork adds
+## What DarkRaw adds
 
 All of it lives in the Camera Raw dialog (**Filter › Camera Raw Filter…**, also shown when a raw file is opened):
 
 - **Auto (Light).** One click chooses Exposure, Contrast, Highlights, Shadows, Whites and Blacks from the picture. It works closed-loop on a thumbnail: each slider is solved against what the Camera Raw pipeline actually produces. The method is original; its numbers will not match any other editor's Auto. The result is one undoable edit and every slider stays adjustable.
 - **White Balance eyedropper** (button in *Color*, shortcut **I**). Click a point that should be neutral grey and Temperature and Tint are solved for it.
 - **Auto white balance.** Makes the picture's average colour neutral (grey-world estimate).
-- **Geometry panel** (*Rotate*, *Distortion*, *Vertical*, *Horizontal*, *Aspect*, *Scale*, *X Offset*, *Y Offset*). Straightens and corrects perspective inside the dialog. The layer keeps its size, so the areas the picture no longer covers become transparent (a filter cannot change the canvas). Settings: `geoRotate` (−10…10°), `geoDistortion`, `geoVertical`, `geoHorizontal`, `geoAspect`, `geoScale` (change from 100 %), `geoOffsetX`, `geoOffsetY`.
-- **Control channel.** `{"ui":{"auto":true}}`, `{"ui":{"autoWhiteBalance":true}}` and `{"ui":{"whiteBalanceAt":[x,y]}}` drive the same actions, like the rest of the dialog.
+- **Geometry panel** (*Rotate*, *Distortion*, *Vertical*, *Horizontal*, *Aspect*, *Scale*, *X Offset*, *Y Offset*). Straightens and corrects perspective inside the dialog. As a filter the layer keeps its size, so the areas the picture no longer covers become transparent. Settings: `geoRotate` (−10…10°), `geoDistortion`, `geoVertical`, `geoHorizontal`, `geoAspect`, `geoScale` (change from 100 %), `geoOffsetX`, `geoOffsetY`.
+- **Crop frame and grid** (in *Geometry*). A frame over the preview with the usual ratios (Original, 1 : 1, 4 : 5, 5 : 7, 3 : 4, 2 : 3, 16 : 9, 16 : 10, or Free), *Swap* for portrait and landscape, *Reset*, and a choice of guide (Rule of Thirds, Grid, Diagonal, Triangle, Golden Ratio, Golden Spiral). Drag inside the frame to move the picture under it and choose what is kept; drag its corners and edges to resize it. A grid covers the picture while a Geometry slider is dragged (or always, with *Always show grid*), to judge horizons and verticals. When a raw file is opened the document is cropped to the frame; as a filter on a layer the frame is off.
+- **Compact panels.** Every slider is one line (label, bar, value) and the side panel is narrower, so many more controls fit on screen.
+- **Control channel.** `{"ui":{"auto":true}}`, `{"ui":{"autoWhiteBalance":true}}`, `{"ui":{"whiteBalanceAt":[x,y]}}` and `{"ui":{"crop":{"ratio":"16:9","rect":[l,t,r,b],"overlay":"thirds","gridAlways":true}}}` drive the same actions, like the rest of the dialog.
+- **Own identity.** DarkRaw icon, window title, and program names `darkraw.exe` and `darkraw-cli.exe`.
 
 Each feature has tests in `crates/algo` and `crates/ui-egui`.
 
 ## Not done yet
 
-HDR merge and HDR output, a real Crop (changing the canvas size), and masking and calibration panels.
+Calibration, presets and snapshots, masks, and a full Crop for the Camera Raw filter (changing a layer's canvas). HDR merge and HDR output are not planned.
+
+## Build and run on Windows
+
+You need Rust 1.95 or newer, a MinGW-w64 toolchain (for example [WinLibs](https://winlibs.com/)) and Git.
+
+```powershell
+git clone https://github.com/lorenzodapolito-oss/DarkRaw
+cd DarkRaw
+cargo run --release -p photocraft
+```
+
+The Cargo package keeps its upstream name (`photocraft`), but the program it builds is `darkraw.exe` (`target\release\darkraw.exe`).
+
+### Portable copy
+
+```powershell
+cargo build --release -p photocraft
+powershell -ExecutionPolicy Bypass -File packaging\windows\make-portable.ps1
+```
+
+This makes `dist\DarkRaw-portable` (and `dist\DarkRaw-portable.zip`): `DarkRaw.exe`, `portable.txt`, the command-line tool and the licences. Copy the folder anywhere, even to a USB stick. While `portable.txt` sits next to the program, settings, presets and recovery files go to a `DarkRawData` folder beside it and nothing is written to `%APPDATA%`. With a GNU (WinLibs) build the script warns if the program needs a DLL that Windows doesn't have (such as `libwinpthread-1.dll`); copy it from WinLibs' `mingw64\bin` into the folder.
+
+### Other platforms
+
+The same `cargo run --release -p photocraft` works on macOS and Linux (see *Get started* below).
+
+## Names
+
+The Rust packages and crates keep the upstream `photocraft-*` names so that updates from upstream merge cleanly. What you see (window title, program, data folders, icon, this page) is DarkRaw.
 
 ## Credits and licence
 
-DarkRaw is a fork of [storytold/photocraft](https://github.com/storytold/photocraft) and keeps its licence, **MIT OR Apache-2.0** (see `LICENSE-MIT` and `LICENSE-APACHE`). It is an independent project, not affiliated with or endorsed by Adobe, and contains no Adobe code or assets. The ArtCraft and PhotoCraft names, logos and artwork in the original README below belong to their owners.
+DarkRaw is a fork of [storytold/photocraft](https://github.com/storytold/photocraft) and keeps its licence, **MIT OR Apache-2.0** (see `LICENSE-MIT` and `LICENSE-APACHE`). It is an independent project, not affiliated with or endorsed by Adobe, and contains no Adobe code or assets. The ArtCraft and PhotoCraft names, logos and artwork in the original README below belong to their owners. The DarkRaw icon was generated with ChatGPT (see [`assets/app-icon/README.md`](assets/app-icon/README.md)).
+
+The rest of this page is the upstream PhotoCraft README, kept for reference. Its download links and installers are PhotoCraft's, not DarkRaw's: DarkRaw has no installers yet, so build it as above.
 
 ---
 
