@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Regenerate every DarkRaw app icon from assets/app-icon/darkraw-source.jpg.
+"""Regenerate every DarkRaw app icon from assets/app-icon/darkraw-source.png.
 
 Needs only Pillow (pip install pillow). The outputs are committed, so packaging never needs this.
 
     python packaging/icons.py
 
-The source is a 1024 px picture of a rounded-square tile on a dark backdrop. The tile is cut out
+The source is a 512 px picture of a rounded-square tile. The tile is cut out
 (TILE_BOX), its corners made transparent, and then rendered two ways, as the old SVG-based script did:
 
   * macOS (darkraw-1024.png, darkraw.icns): the tile padded onto Apple's 824/1024 body grid.
@@ -24,11 +24,11 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
 DIR = ROOT / "assets" / "app-icon"
-SRC = DIR / "darkraw-source.jpg"
+SRC = DIR / "darkraw-source.png"
 
-# The tile inside the 1024 px source, one pixel inside its measured edge to drop the JPEG fringe.
-TILE_BOX = (137, 137, 888, 888)
-CORNER = 169 / 751  # corner radius as a fraction of the tile side
+# The tile inside the 512 px source (almost edge to edge); upscaled with Lanczos for the big sizes.
+TILE_BOX = (2, 2, 510, 510)
+CORNER = 0.19  # corner radius as a fraction of the tile side
 TIGHT_CROP = 0.0  # Windows/Linux: fraction cropped off each side (0 = the whole rounded tile)
 MAC_BODY = 824 / 1024  # Apple's icon body inside its 1024 canvas
 SS = 4  # supersampling for the corner mask
@@ -39,7 +39,7 @@ APP_ID = "ai.storyteller.photocraft"
 
 
 def masked_tile() -> Image.Image:
-    tile = Image.open(SRC).convert("RGB").crop(TILE_BOX).convert("RGBA")
+    tile = Image.open(SRC).convert("RGB").crop(TILE_BOX).resize((1016, 1016), Image.LANCZOS).convert("RGBA")
     side = tile.width
     big = Image.new("L", (side * SS, side * SS), 0)
     r = round(side * CORNER * SS)

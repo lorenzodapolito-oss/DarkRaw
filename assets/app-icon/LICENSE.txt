@@ -1,4 +1,4 @@
-DarkRaw app icon (darkraw-source.jpg and every file derived from it in this directory:
+DarkRaw app icon (darkraw-source.png and every file derived from it in this directory:
 darkraw-1024.png, darkraw.icns, darkraw.ico, hicolor/).
 
 Generated with ChatGPT (OpenAI) from a prompt by the DarkRaw project owner. Under OpenAI's terms

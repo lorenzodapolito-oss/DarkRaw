@@ -5,19 +5,19 @@ dark navy rounded-square tile.
 
 ## Geometry
 
-The source is a 1024 px picture of the tile on a dark backdrop (`darkraw-source.jpg`). The tile is
-cut out and its corners made transparent (corner radius about 22.5 % of the side). The macOS renders
+The source is a 512 px picture of the tile (`darkraw-source.png`). The tile is
+cut out and its corners made transparent (corner radius about 19 % of the side, upscaled with Lanczos for the large sizes). The macOS renders
 pad it onto Apple's 824/1024 icon grid; the Windows and Linux renders use the tile edge to edge.
 
 ## Provenance
 
 Generated with ChatGPT (OpenAI) from a prompt by the DarkRaw project owner, who supplied it as
-`darkraw-source.jpg`. Purely AI-generated images may not be protected by copyright in some
+`darkraw-source.png`. Purely AI-generated images may not be protected by copyright in some
 countries. License: see `LICENSE.txt`.
 
 ## Files
 
-- `darkraw-source.jpg`: the source picture every other file is rendered from.
+- `darkraw-source.png`: the source picture every other file is rendered from.
 - `darkraw-1024.png`: 1024 px render on the macOS grid.
 - `darkraw.icns`: macOS bundle icon (`CFBundleIconFile`).
 - `darkraw.ico`: Windows icon, 16–256 px, embedded in the `.exe` by `apps/photocraft/build.rs`.
@@ -37,6 +37,6 @@ details and tests the `.ico` sizes and the WiX icon references.
 
 ## Regenerate
 
-Replace `darkraw-source.jpg`, adjust `TILE_BOX` in `packaging/icons.py` if the tile sits elsewhere,
+Replace `darkraw-source.png`, adjust `TILE_BOX` in `packaging/icons.py` if the tile sits elsewhere,
 then run `packaging/icons.sh` (or `python packaging/icons.py`). It needs only Pillow and writes the
 `.ico` and `.icns` itself.
