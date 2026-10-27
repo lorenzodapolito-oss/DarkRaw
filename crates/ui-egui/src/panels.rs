@@ -727,7 +727,7 @@ pub fn system_title_bar(app: &PhotocraftApp) -> bool {
 }
 
 /// The title the app shows in its window: DarkRaw.it, by its author.
-pub const APP_TITLE: &str = "DarkRaw.it di Lorenzo D'Apolito";
+pub const APP_TITLE: &str = "DarkRaw LD di Lorenzo D'Apolito";
 
 /// The OS window title: the active document's name suffixed with the app title (a `*` prefix
 /// marks unsaved changes, like the `•` in the app-drawn title), or just the app title with no
