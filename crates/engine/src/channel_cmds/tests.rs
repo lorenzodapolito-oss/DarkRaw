@@ -915,3 +915,31 @@ fn layers_panel_mask_target_isolates_the_curve_channel() {
     let row = isolated_curve_channel_for(s.active().unwrap(), true).expect("quick mask wins");
     assert_eq!((row.name.as_str(), row.gray), ("Quick Mask", Some(GraySurface::QuickMask)));
 }
+
+#[test]
+fn luminosity_masks_pick_lights_mids_and_darks() {
+    use super::luminosity_weight as w;
+    assert_eq!((w("lights", 1, 1.0), w("lights", 1, 0.0)), (1.0, 0.0));
+    assert_eq!((w("darks", 1, 0.0), w("darks", 1, 1.0)), (1.0, 0.0));
+    assert!((w("mids", 1, 0.5) - 1.0).abs() < 1e-6 && w("mids", 1, 0.0) == 0.0 && w("mids", 1, 1.0) == 0.0);
+    assert!(w("lights", 2, 0.5) < w("lights", 1, 0.5), "a higher level is narrower");
+    // hostile input stays in range
+    assert_eq!(w("lights", 3, f32::NAN), 0.0);
+    assert!((0.0..=1.0).contains(&w("mids", 99, 7.0)));
+
+    let mut s = session();
+    rect(&mut s, 0, 0, 20, 20, "replace");
+    s.execute("edit.fill", json!({"contents": "black"})).unwrap();
+    s.execute("select.deselect", json!({})).unwrap();
+    s.execute("select.luminosityMask", json!({"kind": "darks"})).unwrap();
+    assert!(sel_at(&s, 5, 5) > 0.99 && sel_at(&s, 30, 5) < 0.01, "darks select the black patch only");
+    s.execute("select.luminosityMask", json!({"kind": "lights", "level": 2})).unwrap();
+    assert!(sel_at(&s, 5, 5) < 0.01 && sel_at(&s, 30, 5) > 0.99, "lights select the white");
+    s.execute("select.luminosityMask", json!({"kind": "darks", "operation": "add"})).unwrap();
+    assert!(sel_at(&s, 5, 5) > 0.99 && sel_at(&s, 30, 5) > 0.99, "added to the selection");
+    s.execute("select.luminosityMask", json!({"kind": "mids"})).unwrap();
+    assert!(sel_at(&s, 5, 5) < 0.01 && sel_at(&s, 30, 5) < 0.01, "no mid tones in black and white");
+    assert!(s.execute("select.luminosityMask", json!({"kind": "x"})).is_err());
+    assert!(s.execute("select.luminosityMask", json!({"level": 0})).is_err());
+    assert!(s.execute("select.luminosityMask", json!({"operation": "nope"})).is_err());
+}

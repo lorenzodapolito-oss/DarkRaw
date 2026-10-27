@@ -2865,3 +2865,11 @@ curves	Smooth	平滑
 	Always show grid	始终显示网格
 	Turn the frame between portrait and landscape	在竖向和横向之间切换裁剪框
 	The frame crops when a raw file is opened; a filter keeps the layer's size.	打开 raw 文件时按裁剪框裁剪；滤镜保持图层大小不变。
+	Main	主要
+	Color Correction	色彩校正
+	Night Time	夜间
+	Editing	编辑
+	Final Touch	最终润饰
+	Hide LD Panel	隐藏 LD Panel
+	LD Panel	LD Panel
+	Luminosity Mask	明度蒙版

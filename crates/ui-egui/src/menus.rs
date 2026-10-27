@@ -17,7 +17,7 @@ pub(crate) fn modal_allows(app: &PhotocraftApp, id: &str) -> bool {
 }
 
 /// Top-level menus in Photoshop order.
-pub const TOP_MENUS: [&str; 10] = ["File", "Edit", "Image", "Layer", "Type", "Select", "Filter", "View", "Window", "Help"];
+pub const TOP_MENUS: [&str; 11] = ["File", "Edit", "Image", "Layer", "Type", "Select", "Filter", "View", "Window", "LD Panel", "Help"];
 
 /// UI-level commands (handled by the shell rather than the engine): id, label, menu, shortcut.
 /// The table is the engine's ([`photocraft_engine::shell_commands::SHELL_COMMANDS`]), so the
@@ -141,6 +141,9 @@ pub(crate) fn invoke_unguarded(app: &mut PhotocraftApp, ctx: &egui::Context, id:
     }
     // Window > Timeline panel.
     if let Some(r) = crate::timeline_ui::menu(app, id, &params) {
+        return r;
+    }
+    if let Some(r) = crate::ld_panel::menu(app, id, &params) {
         return r;
     }
     // Filter › Plug-ins (installed WebAssembly plug-ins, Install Plug-in…).
@@ -679,7 +682,7 @@ pub fn is_enabled(app: &PhotocraftApp, id: &str) -> bool {
     if crate::analysis_ui::handles(id) {
         return true;
     }
-    if crate::preset_panels::handles(id) || crate::type_panels_ui::handles(id) || crate::timeline_ui::handles(id) {
+    if crate::preset_panels::handles(id) || crate::type_panels_ui::handles(id) || crate::timeline_ui::handles(id) || crate::ld_panel::handles(id) {
         return true;
     }
     if let Some(e) = crate::view_cmds::is_enabled(app, id) {
@@ -773,6 +776,9 @@ fn checked(app: &PhotocraftApp, id: &str) -> Option<bool> {
         return Some(c);
     }
     if let Some(c) = crate::timeline_ui::checked(app, id) {
+        return Some(c);
+    }
+    if let Some(c) = crate::ld_panel::checked(app, id) {
         return Some(c);
     }
     if let Some(c) = crate::type_panels_ui::checked(app, id) {
@@ -899,6 +905,7 @@ pub fn is_live(id: &str) -> bool {
         || crate::preset_panels::handles(id)
         || crate::type_panels_ui::handles(id)
         || crate::timeline_ui::handles(id)
+        || crate::ld_panel::handles(id)
 }
 
 /// Commands outside the catalogue that belong right after a catalogue item: `(id, after)`.

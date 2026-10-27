@@ -54,6 +54,7 @@ pub mod cas_transform;
 pub mod channel_options_ui;
 pub mod channel_view;
 pub mod channels_panel;
+pub mod ld_panel;
 pub mod chrome_ui;
 pub mod cjk_fonts;
 pub mod clip_line_ui;
@@ -2063,6 +2064,9 @@ impl eframe::App for PhotocraftApp {
         }
         if chrome && self.ui.panels.dock {
             panels::right_dock(self, ui);
+        }
+        if chrome {
+            ld_panel::show(self, ui);
         }
         let t = theme::Tokens::get(&ctx);
         let backdrop = if chrome { prefs_ui::pasteboard_color(self).unwrap_or(t.canvas) } else { egui::Color32::BLACK };

@@ -1004,6 +1004,51 @@ fn load_selection(s: &mut Session, p: &Value) -> Result<Value> {
     Ok(json!({ "selected": selected }))
 }
 
+/// How strongly a pixel of luminosity `l` (0..1) belongs to a luminosity mask: `lights` = l,
+/// `darks` = 1 − l, `mids` = 4·l·(1 − l) (1 at mid grey, 0 at black and white). `level` n raises it to
+/// the n-th power, so level 2 and 3 select a narrower, more selective part of the tonal range.
+pub(crate) fn luminosity_weight(kind: &str, level: u32, l: f32) -> f32 {
+    let l = if l.is_finite() { l.clamp(0.0, 1.0) } else { 0.0 };
+    let base = match kind {
+        "darks" => 1.0 - l,
+        "mids" => 4.0 * l * (1.0 - l),
+        _ => l,
+    };
+    base.powi(level.clamp(1, 8) as i32)
+}
+
+/// Luminosity masks: the image's brightness as a selection of its lights, midtones or darks, at
+/// one of several levels of selectivity, combined with the current selection.
+fn luminosity_mask(s: &mut Session, p: &Value) -> Result<Value> {
+    let cmd = "select.luminosityMask";
+    let kind = p.get("kind").and_then(Value::as_str).unwrap_or("lights");
+    if !matches!(kind, "lights" | "mids" | "darks") {
+        return Err(bad(cmd, format!("unknown kind `{kind}` (lights, mids or darks)")));
+    }
+    let level = match p.get("level") {
+        None => 1,
+        Some(v) => v.as_u64().filter(|n| (1..=8).contains(n)).ok_or_else(|| bad(cmd, "`level` must be a whole number from 1 to 8"))? as u32,
+    };
+    let mode = match operation(p, "operation") {
+        "new" | "replace" => SelectionMode::Replace,
+        "add" => SelectionMode::Add,
+        "subtract" => SelectionMode::Subtract,
+        "intersect" => SelectionMode::Intersect,
+        other => return Err(bad(cmd, format!("unknown operation `{other}`"))),
+    };
+    let mut src = p.clone();
+    src["channel"] = json!("composite");
+    let mut plane = source(s, &src, cmd, true)?.into_iter().next().ok_or_else(|| bad(cmd, "the image has no pixels"))?;
+    for v in &mut plane {
+        *v = luminosity_weight(kind, level, *v);
+    }
+    let selected = s.edit("Luminosity Mask", |doc, _| {
+        doc.selection = sel::combine(doc.selection.as_ref(), &plane, doc.bounds(), mode);
+        Ok(doc.selection.is_some())
+    })?;
+    Ok(json!({ "selected": selected }))
+}
+
 // ---------------------------------------------------------------------------------------------
 // Quick Mask
 
@@ -1923,6 +1968,15 @@ pub fn specs() -> Vec<CommandSpec> {
             s,
             &serde_json::json!({"channel": "mask"})
         )),
+        spec!(
+            "select.luminosityMask",
+            "Luminosity Mask",
+            ["Select"],
+            None,
+            r##"{"kind":"lights|mids|darks"="lights","level":1..8=1 (higher = narrower),"operation":"new|add|subtract|intersect"="new"}"##,
+            has_doc,
+            luminosity_mask
+        ),
         // ⌘⌥2 loads the image's luminosity as a selection (⌘-click on the composite channel).
         spec!("select.loadLuminosity", "Load Luminosity", [], Some("Cmd+Alt+2"), "{}", has_doc, |s, _| load_selection(
             s,

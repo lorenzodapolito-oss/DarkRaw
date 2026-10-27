@@ -4364,3 +4364,61 @@ shape	Appearance	Aspetto
 	Turn the frame between portrait and landscape	Passa la cornice da orizzontale a verticale e viceversa
 	The frame crops when a raw file is opened; a filter keeps the layer's size.	La cornice ritaglia all'apertura di un file raw; un filtro mantiene le dimensioni del livello.
 	1 : 1 (Square)	1 : 1 (Quadrato)
+	Luminosity Masks	Maschere di luminosità
+	Open a document to use luminosity masks.	Apri un documento per usare le maschere di luminosità.
+	A higher level selects a narrower part of the tones.	Un livello più alto seleziona una parte più stretta dei toni.
+	LD Panel	LD Panel
+	Align layers	Allinea i livelli
+	Black and white	Bianco e nero
+	Blend layers (stack)	Fondi i livelli (stack)
+	Color Cast and Saturation	Dominanti e saturazione
+	Color Correction	Correzione colore
+	Contrast +	Contrasto +
+	Contrast Enhance	Aumento contrasto
+	Cool photo filter	Filtro foto freddo
+	Day	Giorno
+	Editing	Modifica
+	Export as PNG	Esporta come PNG
+	Exposure Compensation (EV)	Compensazione esposizione (EV)
+	Exposure Stacking	Impilamento esposizioni
+	Final Sharpening	Nitidezza finale
+	Final Touch	Ritocco finale
+	Flatten image	Unisci immagine
+	Focus Stacking	Focus stacking
+	Highlights Recovery	Recupero alte luci
+	Light (50%)	Leggera (50%)
+	Main	Principale
+	Medium (80%)	Media (80%)
+	Merge layers	Unisci i livelli
+	Night	Notte
+	Night Time	Notte
+	Open a document to use the panel.	Apri un documento per usare il pannello.
+	Polarizer effect	Effetto polarizzatore
+	Quick Export	Esportazione rapida
+	Recovery 100%	Recupero 100%
+	Recovery 50%	Recupero 50%
+	Reduce blue (blue hour)	Riduci il blu (ora blu)
+	Reduce saturation	Riduci saturazione
+	Reduce yellow cast	Riduci dominante gialla
+	Selection to layer mask	Selezione in maschera di livello
+	Selective Color Correction	Correzione colore selettiva
+	Selective Desaturation	Desaturazione selettiva
+	Set layers to Lighten	Metti i livelli in Schiarisci
+	Soft Glow (Orton)	Bagliore morbido (Orton)
+	Star Trails	Scie stellari
+	Step 1: align photos	Passo 1: allinea le foto
+	Step 2: blend layers	Passo 2: fondi i livelli
+	Strong (100%)	Forte (100%)
+	Tone Filters	Filtri di tono
+	Utilities	Utilità
+	Warm photo filter	Filtro foto caldo
+	Warm tonality filter	Filtro tonalità calda
+	Web 1080 px	Web 1080 px
+	Web 1600 px	Web 1600 px
+	Web 2048 px	Web 2048 px
+	Web Resize	Ridimensiona per il web
+	Whites +	Bianchi +
+	Hide LD Panel	Nascondi LD Panel
+	Luminosity Mask	Maschera di luminosità
+	Dodge and Burn	Schiarisci e brucia
+	Extra Lights Enhance	Potenzia le luci

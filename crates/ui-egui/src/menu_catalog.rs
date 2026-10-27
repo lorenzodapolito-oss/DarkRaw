@@ -774,4 +774,12 @@ pub static CATALOG: &[(&[&str], &str, Option<&str>, &str)] = &[
     (&["Window"], "---", None, "---"),
     (&["Window"], "Options", None, "window.panel.options"),
     (&["Window"], "Tools", None, "window.panel.tools"),
+    (&["LD Panel"], "Main", None, "ldpanel.main"),
+    (&["LD Panel"], "Color Correction", None, "ldpanel.color"),
+    (&["LD Panel"], "Night Time", None, "ldpanel.night"),
+    (&["LD Panel"], "Editing", None, "ldpanel.editing"),
+    (&["LD Panel"], "Final Touch", None, "ldpanel.final"),
+    (&["LD Panel"], "Export", None, "ldpanel.export"),
+    (&["LD Panel"], "---", None, "---"),
+    (&["LD Panel"], "Hide LD Panel", None, "ldpanel.hide"),
 ];

@@ -1195,6 +1195,9 @@ pub struct UiState {
     #[serde(default)]
     pub analysis: crate::analysis_ui::AnalysisUi,
     pub timeline: crate::timeline_ui::TimelineUi,
+    /// Luminosity Masks panel (see `ld_panel`).
+    #[serde(default)]
+    pub ldpanel: crate::ld_panel::LdPanel,
     /// Slice and Slice Select tools (see `slice_ui`).
     #[serde(default)]
     pub slices: crate::slice_ui::SliceUi,
@@ -1344,6 +1347,7 @@ impl Default for UiState {
             type_panels: Default::default(),
             analysis: Default::default(),
             timeline: Default::default(),
+            ldpanel: Default::default(),
             slices: Default::default(),
             frame_tool: Default::default(),
             artboard_tool: Default::default(),
