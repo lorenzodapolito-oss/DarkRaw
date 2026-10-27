@@ -4,7 +4,7 @@
 //! engine commands (selections, adjustment layers, filters, stacking, export), so the control
 //! channel and the Actions panel see exactly what the buttons do.
 
-use egui::{RichText, vec2};
+use egui::RichText;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 
