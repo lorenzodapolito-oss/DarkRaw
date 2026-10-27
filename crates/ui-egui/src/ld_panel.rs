@@ -167,6 +167,15 @@ pub fn show(app: &mut PhotocraftApp, ui: &mut egui::Ui) {
         .exact_size(WIDTH)
         .frame(egui::Frame::NONE.fill(t.card).inner_margin(8.0))
         .show(ui, |ui| {
+            // smaller buttons and tighter spacing: the panel keeps its size, the content fits it
+            {
+                let sp = ui.spacing_mut();
+                sp.button_padding = egui::vec2(4.0, 1.0);
+                sp.item_spacing = egui::vec2(4.0, 3.0);
+                sp.interact_size.y = 20.0;
+                sp.slider_width = 70.0;
+                ui.style_mut().override_font_id = Some(egui::FontId::proportional(11.0));
+            }
             ui.horizontal(|ui| {
                 ui.label(RichText::new("LD Panel").strong().size(14.0).color(t.text));
                 ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
@@ -179,7 +188,7 @@ pub fn show(app: &mut PhotocraftApp, ui: &mut egui::Ui) {
             egui::Grid::new("ld-sections").num_columns(3).spacing([4.0, 4.0]).show(ui, |ui| {
                 for (i, name) in SECTIONS.iter().enumerate() {
                     let on = state.section == *name;
-                    let r = ui.add_sized([(WIDTH - 16.0 - 8.0) / 3.0, 24.0], egui::Button::new(RichText::new(section_label(name)).size(11.0)).selected(on));
+                    let r = ui.add_sized([(WIDTH - 16.0 - 8.0) / 3.0, 20.0], egui::Button::new(RichText::new(section_label(name)).size(10.0)).selected(on));
                     if r.clicked() {
                         state.section = (*name).to_string();
                     }
@@ -193,13 +202,17 @@ pub fn show(app: &mut PhotocraftApp, ui: &mut egui::Ui) {
                 ui.weak(crate::i18n::t("Open a document to use the panel."));
                 return;
             }
-            egui::ScrollArea::vertical().auto_shrink([false, false]).show(ui, |ui| match state.section.as_str() {
+            egui::ScrollArea::vertical().auto_shrink([false, false]).show(ui, |ui| {
+                // leave room for the scroll bar so nothing runs under the photo
+                ui.set_max_width(ui.available_width() - 12.0);
+                match state.section.as_str() {
                 "color" => color_section(ui, &mut state, &mut steps),
                 "night" => night_section(ui, &mut steps),
                 "editing" => editing_section(ui, &mut steps),
                 "final" => final_section(ui, &mut steps),
                 "export" => export_section(ui, &mut steps),
                 _ => main_section_ui(ui, &mut state, &mut steps, &mut acts),
+                }
             });
         });
     app.ui.ldpanel = state;
@@ -236,7 +249,7 @@ fn main_section_ui(ui: &mut egui::Ui, state: &mut LdPanel, steps: &mut Vec<(&'st
             }
         });
         // three columns, as the tones run from dark to light, each with its + and − below
-        let col = (ui.available_width() - 16.0) / 3.0;
+        let col = ((ui.available_width() - 12.0) / 3.0).floor();
         ui.horizontal(|ui| {
             for (kind, label) in [("darks", crate::i18n::t("Shadows")), ("mids", crate::i18n::t("Midtones")), ("lights", crate::i18n::t("Lights"))] {
                 ui.vertical(|ui| {
@@ -261,7 +274,7 @@ fn main_section_ui(ui: &mut egui::Ui, state: &mut LdPanel, steps: &mut Vec<(&'st
         }
     });
     group(ui, crate::i18n::t("Dodge and Burn"), |ui| {
-        let col = (ui.available_width() - 16.0) / 3.0;
+        let col = ((ui.available_width() - 12.0) / 3.0).floor();
         ui.horizontal_top(|ui| {
             ui.vertical(|ui| {
                 ui.set_width(col);
@@ -275,9 +288,10 @@ fn main_section_ui(ui: &mut egui::Ui, state: &mut LdPanel, steps: &mut Vec<(&'st
             ui.vertical(|ui| {
                 ui.set_width(col);
                 ui.label(RichText::new(crate::i18n::t("Brush")).strong());
+                ui.spacing_mut().slider_width = (col - 44.0).max(24.0);
                 for (i, (label, max)) in [(crate::i18n::t("Size"), 2000.0f32), (crate::i18n::t("Opacity"), 100.0), (crate::i18n::t("Hardness"), 100.0)].into_iter().enumerate() {
                     ui.label(label);
-                    if ui.add(egui::Slider::new(&mut state.brush[i], 0.0..=max).show_value(true)).changed() {
+                    if ui.add(egui::Slider::new(&mut state.brush[i], 0.0..=max).show_value(true).trailing_fill(false)).changed() {
                         acts.push(Act::Brush);
                     }
                 }
